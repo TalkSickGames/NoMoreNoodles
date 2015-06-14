@@ -160,11 +160,11 @@ public class Avatar_Behavior : MonoBehaviour {
 
 		if (slowTimeTime == 2) {
 			myCircle.SetActive (false);
-			myCircle.transform.localScale = new Vector3 (2f, 2f, 1f);
+			myCircle.transform.localScale = new Vector3 (1f, 1f, 1f);
 			//myCircle.transform.localScale = Vector3.Lerp (myCircle.transform.localScale, new Vector3 (slowTimeTime * 2f, slowTimeTime * 2f, 1f), Time.deltaTime * (1f / Time.timeScale));
 		} else {
 			myCircle.SetActive (true);
-			myCircle.transform.localScale = Vector3.Lerp (myCircle.transform.localScale, new Vector3 (slowTimeTime * 2f, slowTimeTime * 2f, 1f),2f* Time.deltaTime * (1f / Time.timeScale));
+			myCircle.transform.localScale = Vector3.Lerp (myCircle.transform.localScale, new Vector3 (slowTimeTime * 1f, slowTimeTime * 1f, 1f),2f* Time.deltaTime * (1f / Time.timeScale));
 
 		}
 

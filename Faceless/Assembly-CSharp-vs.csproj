@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\_Script\2DLightAssets\DynamicLight.cs" />
+     <Compile Include="Assets\_Script\2DLightAssets\StaticLight.cs" />
      <Compile Include="Assets\_Script\Avatar_Behavior.cs" />
      <Compile Include="Assets\_Script\Camera_Behavior.cs" />
      <Compile Include="Assets\_Script\GameManager.cs" />
@@ -64,7 +65,7 @@
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
  </Reference>
  <Reference Include="pseudoSinCos">
- <HintPath>C:/Users/Ixeno/Desktop/Faceless_Nick/Faceless_Nick/Faceless/Assets/_Script/2DLightAssets/pseudoSinCos.dll</HintPath>
+ <HintPath>C:/Users/Ixeno/Documents/GitHub/NoMoreNoodles/Faceless/Assets/_Script/2DLightAssets/pseudoSinCos.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.iOS.Extensions.Xcode">
  <HintPath>C:/Program Files/Unity/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
