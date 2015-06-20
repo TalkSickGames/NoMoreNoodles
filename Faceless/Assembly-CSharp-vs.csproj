@@ -53,6 +53,7 @@
      <Compile Include="Assets\_Script\GameManager.cs" />
      <Compile Include="Assets\_Script\Parallaxe.cs" />
      <Compile Include="Assets\_Script\SpawnPoint.cs" />
+     <Compile Include="Assets\_Script\Water\Water.cs" />
      <Compile Include="Assets\_Script\Waypoints.cs" />
      <None Include="Assets\_Script\2DLightAssets\Gradient-NoTexture-Radial-SingleColor-ToTransparent-RegularUV-AlphaBlend.shader" />
  <Reference Include="UnityEngine.UI">

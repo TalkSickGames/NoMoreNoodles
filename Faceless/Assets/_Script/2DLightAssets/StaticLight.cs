@@ -24,8 +24,8 @@ public class StaticLight : MonoBehaviour {
 	// Called at beginning of script execution
 	public void Bake () {
 		if (this.GetComponent<MeshFilter> () != null && this.GetComponent<MeshRenderer> () != null) {
-			DestroyImmediate (gameObject.GetComponent (this.GetComponent<MeshFilter> ().GetType ()));
 			DestroyImmediate (gameObject.GetComponent (this.GetComponent<MeshRenderer> ().GetType ()));
+			DestroyImmediate (gameObject.GetComponent (this.GetComponent<MeshFilter> ().GetType ()));
 		}
 		PseudoSinCos.initPseudoSinCos();
 		
