@@ -1383,7 +1383,6 @@ GameObject:
   - 20: {fileID: 516835646}
   - 124: {fileID: 516835645}
   - 92: {fileID: 516835644}
-  - 81: {fileID: 516835643}
   m_Layer: 0
   m_Name: Camera_Render
   m_TagString: Untagged
@@ -1391,13 +1390,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &516835643
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 516835642}
-  m_Enabled: 1
 --- !u!92 &516835644
 Behaviour:
   m_ObjectHideFlags: 0
@@ -2635,7 +2627,6 @@ GameObject:
   - 20: {fileID: 1220059450}
   - 92: {fileID: 1220059449}
   - 124: {fileID: 1220059448}
-  - 81: {fileID: 1220059447}
   m_Layer: 0
   m_Name: PixelCamera
   m_TagString: MainCamera
@@ -2655,13 +2646,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 305970235}
   m_RootOrder: 0
---- !u!81 &1220059447
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1220059444}
-  m_Enabled: 1
 --- !u!124 &1220059448
 Behaviour:
   m_ObjectHideFlags: 0

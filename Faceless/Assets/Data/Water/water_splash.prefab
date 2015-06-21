@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 444668}
   - 198: {fileID: 19846082}
   - 199: {fileID: 19985484}
-  m_Layer: 4
+  m_Layer: 0
   m_Name: water_splash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1116,7 +1116,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_Layer
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
