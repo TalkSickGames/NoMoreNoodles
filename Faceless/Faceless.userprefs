@@ -2,11 +2,8 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\_Script\Water\Water.cs">
     <Files>
-      <File FileName="Assets\_Script\Avatar_Behavior.cs" Line="1" Column="1" />
-      <File FileName="Assets\_Script\2DLightAssets\StaticLight.cs" Line="1" Column="1" />
-      <File FileName="Assets\Editor\StaticLightEditor.cs" Line="1" Column="1" />
-      <File FileName="Assets\_Script\2DLightAssets\DynamicLight.cs" Line="1" Column="1" />
-      <File FileName="Assets\_Script\Water\Water.cs" Line="78" Column="16" />
+      <File FileName="Assets\_Script\Water\Water.cs" Line="27" Column="16" />
+      <File FileName="..\..\..\mobileTest\Assets\sphere.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
