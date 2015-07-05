@@ -1,6 +1,8 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2008
 
+Project("{C0F0951B-2EEC-10AD-C031-C08444FE35D2}") = "Faceless", "Assembly-CSharp-firstpass-vs.csproj", "{B21B790B-894A-8101-B416-00EB7FE92701}"
+EndProject
 Project("{C0F0951B-2EEC-10AD-C031-C08444FE35D2}") = "Faceless", "Assembly-CSharp-vs.csproj", "{394E2014-D2AB-E827-F97D-095663C07872}"
 EndProject
 Project("{C0F0951B-2EEC-10AD-C031-C08444FE35D2}") = "Faceless", "Assembly-CSharp-Editor-vs.csproj", "{7C086939-35A3-EA03-1BAF-47B1CFC9CCEC}"
@@ -11,6 +13,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B21B790B-894A-8101-B416-00EB7FE92701}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B21B790B-894A-8101-B416-00EB7FE92701}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B21B790B-894A-8101-B416-00EB7FE92701}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B21B790B-894A-8101-B416-00EB7FE92701}.Release|Any CPU.Build.0 = Release|Any CPU
 		{394E2014-D2AB-E827-F97D-095663C07872}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{394E2014-D2AB-E827-F97D-095663C07872}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{394E2014-D2AB-E827-F97D-095663C07872}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -23,7 +29,7 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-																																																																																																		GlobalSection(MonoDevelopProperties) = preSolution
+																																																																																																										GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Assembly-CSharp.csproj
 		Policies = $0
 		$0.TextStylePolicy = $1

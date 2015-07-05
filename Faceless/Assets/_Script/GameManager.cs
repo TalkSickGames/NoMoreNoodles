@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class GameManager : MonoBehaviour {
 
 	public GameObject myAvatar;
+	private Avatar_BehaviorV2 avatarB;
 	private Dictionary<int, SpawnPoint> mySpawns = new Dictionary<int, SpawnPoint> ();
 	private GameObject[] ListMySpawns;
 	public int idToSpawnTo;
@@ -31,6 +32,7 @@ public class GameManager : MonoBehaviour {
 
 		mainCamera = Camera.main.gameObject;
 		avatar = Instantiate (myAvatar, mySpawns [idToSpawnTo].transform.position, Quaternion.identity) as GameObject;
+		avatarB = avatar.GetComponent<Avatar_BehaviorV2>();
 
 	}
 
@@ -58,6 +60,11 @@ public class GameManager : MonoBehaviour {
 		get{return avatar;}
 		set{avatar = value;}
 	}
+	public Avatar_BehaviorV2 AvatarB{
+		get{return avatarB;}
+		set{avatarB = value;}
+	}
+
 
 	public static GameManager Instance{
 		get{return instance;}

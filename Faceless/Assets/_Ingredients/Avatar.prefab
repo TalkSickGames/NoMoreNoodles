@@ -62,7 +62,7 @@ GameObject:
   - 114: {fileID: 11499642}
   m_Layer: 0
   m_Name: Avatar
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -172,22 +172,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 199672}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e16d5176c2f54a34f9518afbed40596a, type: 3}
+  m_Script: {fileID: 11500000, guid: 0069225d510cb3e49a214c8d48e311bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 6
   jumpForce: 14
   gravity: 40
-  steamChargeLittle: 10
-  steamChargeBig: 22.5
   myArrow: {fileID: 113490}
   myCircle: {fileID: 134732}
-  isJumping: 0
-  isFalling: 0
-  isTakingDamage: 0
-  isMoving: 0
-  isGrounded: 0
-  isCharging: 0
   groundLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -280,6 +272,10 @@ Prefab:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 10754, guid: 0000000000000000e000000000000000, type: 0}
+    - target: {fileID: 0}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 199672}
