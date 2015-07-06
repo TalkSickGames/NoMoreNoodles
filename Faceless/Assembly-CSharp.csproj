@@ -46,18 +46,18 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Canvas_UI.cs" />
-     <Compile Include="Assets\PickUps.cs" />
      <Compile Include="Assets\_Script\2DLightAssets\DynamicLight.cs" />
      <Compile Include="Assets\_Script\2DLightAssets\StaticLight.cs" />
-     <Compile Include="Assets\_Script\Avatar_Behavior.cs" />
-     <Compile Include="Assets\_Script\Avatar_BehaviorV2.cs" />
-     <Compile Include="Assets\_Script\Camera_Behavior.cs" />
-     <Compile Include="Assets\_Script\GameManager.cs" />
-     <Compile Include="Assets\_Script\Parallaxe.cs" />
-     <Compile Include="Assets\_Script\SpawnPoint.cs" />
-     <Compile Include="Assets\_Script\Water\Water.cs" />
-     <Compile Include="Assets\_Script\Waypoints.cs" />
+     <Compile Include="Assets\_Script\Avatar\Avatar_Behavior.cs" />
+     <Compile Include="Assets\_Script\Avatar\Avatar_BehaviorV2.cs" />
+     <Compile Include="Assets\_Script\Cam\Camera_Behavior.cs" />
+     <Compile Include="Assets\_Script\Ingredients\PickUps.cs" />
+     <Compile Include="Assets\_Script\Mechanic\GameManager.cs" />
+     <Compile Include="Assets\_Script\Mechanic\Parallaxe.cs" />
+     <Compile Include="Assets\_Script\Mechanic\SpawnPoint.cs" />
+     <Compile Include="Assets\_Script\Mechanic\Water.cs" />
+     <Compile Include="Assets\_Script\Mechanic\Waypoints.cs" />
+     <Compile Include="Assets\_Script\UI\Canvas_UI.cs" />
      <None Include="Assets\Standard Assets\Effects\GlassRefraction\Shaders\GlassStainedBumpDistort.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_BloomAndFlares\BlendOneOne.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\NoiseEffectShaderRGB.shader" />
@@ -150,6 +150,10 @@
  <Reference Include="UnityEditor.iOS.Extensions.Xcode">
  <HintPath>C:/Program Files/Unity/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
  </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
+      <Project>{B21B790B-894A-8101-B416-00EB7FE92701}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
