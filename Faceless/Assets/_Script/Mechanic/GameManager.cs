@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour {
 		mainCamera = Camera.main.gameObject;
 		avatar = Instantiate (myAvatar, mySpawns [idToSpawnTo].transform.position, Quaternion.identity) as GameObject;
 		avatarB = avatar.GetComponent<Avatar_BehaviorV2>();
-
+		avatarB.HP = 6;
 	}
 
 	void Start(){

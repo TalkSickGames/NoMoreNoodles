@@ -7,25 +7,26 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	public float jumpForce;
 	public float gravity;
 
-	//public float timeChargeMax;
-	//public float timeChargeLittle;
-	//public float timeChargeBig;
-
+	//time 
 	private float slowTimeFactor;
 	private float slowTimeLerp;
 	private bool isSlowed;
 	private float slowTimeTime;
 
+	//GUI
 	public GameObject myArrow;
 	public GameObject myCircle;
 
+	//Ammo and charge
 	private bool chargeIsTrick;
 	private bool applied;
 	private float chargeCooldown;
 	private float rechargeCooldown;
-	//private float timeCooldown;
 	private int trickAmmo;
 	private int powerAmmo;
+
+	//life stuff
+	public int hp;
 
 
 	//State! :D
@@ -36,16 +37,15 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	private bool isGrounded;
 	private bool isCharging;
 	private bool isChargingFromAir;
+	private bool isInWater;
 
+	//Utility
 	public LayerMask groundLayer;
-	
 	private Vector2 movement;
-	//private Vector2 effectVelocity;
 	private Vector2 steamVelocity;
-	//private float steamDirection;
 	private float timeCharge;
 
-//	private Vector3 tempMouse;
+	//reference
 	private Rigidbody2D myRigid;
 	private BoxCollider2D myBox;
 	private Animator myAnimator;
@@ -81,6 +81,16 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		myArrow.GetComponent<SpriteRenderer> ().enabled = false;
 
 		movement = myRigid.velocity;
+
+		if(!isGrounded && CheckIsGround()){
+			if(movement.y <=-25f && movement.y >-30f){
+				hp -= 1;
+			}
+			if(movement.y <=-30f){
+				hp -= 2;
+			}
+		}
+
 		isGrounded = CheckIsGround();
 
 		///Lerp movement and Gravity
@@ -234,6 +244,11 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	public int TrickAmmo{
 		get{return trickAmmo;}
 		set{trickAmmo = value;}
+	}
+
+	public int HP{
+		get{return hp;}
+		set{hp = value;}
 	}
 
 	public bool ChargeIsTrick{

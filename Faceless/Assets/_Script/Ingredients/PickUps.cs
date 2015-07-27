@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class PickUps : MonoBehaviour {
-	public enum PickupType { Ammo, Life, Focus};
+	public enum PickupType { Ammo, HalfHeart, FullHeart, FullHP, Focus};
 	public PickupType myType;
 	// Use this for initialization
 	void Start () {
@@ -21,7 +21,15 @@ public class PickUps : MonoBehaviour {
 			case PickupType.Ammo :
 				GameManager.Instance.AvatarB.PowerAmmo += 1;
 				break;
+			case PickupType.HalfHeart:
+				GameManager.Instance.AvatarB.HP += 1;
+				break;
+			case PickupType.FullHeart:
+				GameManager.Instance.AvatarB.HP += 2;
+				break;
 			}
+
+		
 			Destroy(this.gameObject);
 		}
 

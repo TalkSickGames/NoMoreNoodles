@@ -53,9 +53,9 @@ public class Water : MonoBehaviour{
 
 	void CreateWave(Vector3 pos,float velocity){
 		if(velocity>0f){
-			velocity = 3.5f;
+			velocity = 2.5f;
 		}else{
-			velocity = -5f;
+			velocity = -1.5f;
 		}
 		foreach(WaterBlock wtb in myBlocks){
 			float disL = Mathf.Clamp(Vector3.Distance(wtb.gameObject.transform.position+(Vector3.left*0.25f)+(Vector3.up*0.25f),pos),0.1f,1000f);
