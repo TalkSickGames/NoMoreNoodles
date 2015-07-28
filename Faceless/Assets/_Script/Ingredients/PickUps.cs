@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Foo;
 
 public class PickUps : MonoBehaviour {
-	public enum PickupType { Ammo, HalfHeart, FullHeart, FullHP, Focus};
+
 	public PickupType myType;
+	public bool isRespawnable;
+	public float respawnTime;
 	// Use this for initialization
 	void Start () {
 	
@@ -28,8 +31,9 @@ public class PickUps : MonoBehaviour {
 				GameManager.Instance.AvatarB.HP += 2;
 				break;
 			}
-
-		
+			if(isRespawnable){
+				GameManager.Instance.gameObject.GetComponent<RespawnManager>().MyRespawn.Add( new Respawnable(myType, this.gameObject.transform.position, respawnTime));
+			}
 			Destroy(this.gameObject);
 		}
 

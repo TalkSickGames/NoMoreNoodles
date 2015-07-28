@@ -38,11 +38,11 @@ Material:
       data:
         first:
           name: _UVXScale
-        second: -.0399999991
+        second: -.00999999978
       data:
         first:
           name: _UVYScale
-        second: -.0399999991
+        second: -.00999999978
       data:
         first:
           name: _Offset

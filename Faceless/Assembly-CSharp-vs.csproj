@@ -53,7 +53,9 @@
      <Compile Include="Assets\_Script\Cam\Camera_Behavior.cs" />
      <Compile Include="Assets\_Script\Ingredients\PickUps.cs" />
      <Compile Include="Assets\_Script\Mechanic\GameManager.cs" />
+     <Compile Include="Assets\_Script\Mechanic\MyEnum.cs" />
      <Compile Include="Assets\_Script\Mechanic\Parallaxe.cs" />
+     <Compile Include="Assets\_Script\Mechanic\RespawnManager.cs" />
      <Compile Include="Assets\_Script\Mechanic\SpawnPoint.cs" />
      <Compile Include="Assets\_Script\Mechanic\Water.cs" />
      <Compile Include="Assets\_Script\Mechanic\Waypoints.cs" />
