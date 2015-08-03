@@ -9,6 +9,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 483458}
   - 114: {fileID: 11445360}
+  - 61: {fileID: 6109006}
   m_Layer: 0
   m_Name: NPC
   m_TagString: Untagged
@@ -74,11 +75,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 145438}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.43548775, y: .158046365, z: 0}
+  m_LocalPosition: {x: 0, y: -.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 483458}
-  m_RootOrder: 0
+  m_RootOrder: 2
 --- !u!4 &432822
 Transform:
   m_ObjectHideFlags: 1
@@ -86,11 +87,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 185656}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.43548775, y: .158046365, z: 0}
+  m_LocalPosition: {x: 0, y: .5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 483458}
-  m_RootOrder: 2
+  m_RootOrder: 0
 --- !u!4 &483458
 Transform:
   m_ObjectHideFlags: 1
@@ -98,12 +99,12 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 111008}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11.2245121, y: -1.34804642, z: 0}
+  m_LocalPosition: {x: -16.0699997, y: 7.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 403034}
-  - {fileID: 490826}
   - {fileID: 432822}
+  - {fileID: 490826}
+  - {fileID: 403034}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!4 &490826
@@ -113,11 +114,24 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 166104}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.43548775, y: .158046365, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 483458}
   m_RootOrder: 1
+--- !u!61 &6109006
+BoxCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 111008}
+  m_Enabled: 0
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Size: {x: .5, y: 1.5}
 --- !u!95 &9523620
 Animator:
   serializedVersion: 3
@@ -180,10 +194,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02bfe484adff8948bba5ecea800afd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myHead: {fileID: 0}
-  myChest: {fileID: 0}
-  myLegs: {fileID: 0}
+  myHead: {fileID: 185656}
+  myChest: {fileID: 166104}
+  myLegs: {fileID: 145438}
   myNodes: []
+  speed: 2
+  jumpHeight: 2
 --- !u!212 &21207760
 SpriteRenderer:
   m_ObjectHideFlags: 1
