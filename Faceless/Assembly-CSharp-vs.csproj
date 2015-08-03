@@ -64,6 +64,7 @@
      <Compile Include="Assets\_Script\Mechanic\StackFSM.cs" />
      <Compile Include="Assets\_Script\Mechanic\Water.cs" />
      <Compile Include="Assets\_Script\Mechanic\Waypoints.cs" />
+     <Compile Include="Assets\_Script\Mechanic\particle_killTime.cs" />
      <Compile Include="Assets\_Script\UI\Canvas_UI.cs" />
      <None Include="Assets\Standard Assets\Effects\GlassRefraction\Shaders\GlassStainedBumpDistort.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_BloomAndFlares\BlendOneOne.shader" />

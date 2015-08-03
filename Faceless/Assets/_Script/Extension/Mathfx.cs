@@ -24,20 +24,21 @@ public class Mathfx
 
 		ite = end - start;
 
-		if (ite < 0f) {	
+		if (ite > 0f) {	
 			
 			diff = end-start;
 			diff = diff/2f;
 			tempf = Mathf.Lerp (start, end, value);
-			tempf += Mathf.Lerp (0f, (Mathf.Clamp(diff,1.5f,5f))+0.25f, Mathf.Sin (value * Mathf.PI * 1f) * 1f);
+			//tempf += Mathf.Lerp (0f, (Mathf.Clamp(diff,1.5f,5f))+0.25f, Mathf.Sin(value * Mathf.PI));
+			tempf += Mathf.Lerp (0f, Mathf.Clamp(diff,1.5f,50f), Mathf.Sin(value * Mathf.PI));
 
 			return tempf;
 		} else {
 			diff = start-end;
 			diff = diff/2f;
 			tempf = Mathf.Lerp (start, end, value);
-			tempf += (Mathf.Lerp (0f, (Mathf.Clamp(diff,1.5f,5f))+0.25f, Mathf.Sin(value * Mathf.PI * 1f) * 1f));
-
+			//tempf += Mathf.Lerp (0f, (Mathf.Clamp(diff,1.5f,5f))+0.25f, Mathf.Sin(value * Mathf.PI));
+			tempf += Mathf.Lerp (0f, Mathf.Clamp(diff,1.5f,50f), Mathf.Sin(value * Mathf.PI));
 			return tempf;
 		}
 
