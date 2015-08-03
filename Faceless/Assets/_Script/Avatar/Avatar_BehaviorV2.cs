@@ -194,7 +194,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		}
 		
 		
-		if (!Approx(new Vector3(steamVelocity.x,steamVelocity.y,0f),Vector3.zero,0.1f)) {
+		if (!Mathfx.Approx(new Vector3(steamVelocity.x,steamVelocity.y,0f),Vector3.zero,0.1f)) {
 			steamVelocity = Vector2.Lerp(steamVelocity,Vector2.zero,4f*Time.deltaTime);
 		}else{
 			steamVelocity = Vector2.zero;
@@ -204,7 +204,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 			isSlowed = false;
 			Jump ();
 		}
-		if(!Approx(Input.GetAxisRaw ("Horizontal"),0f,0.1f)){
+		if(!Mathfx.Approx(Input.GetAxisRaw ("Horizontal"),0f,0.1f)){
 			
 			
 			moveSpeedRamp = Mathf.Lerp(moveSpeedRamp, Input.GetAxisRaw ("Horizontal"), 10f * Time.deltaTime);
@@ -239,12 +239,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		movement = new Vector2 (movement.x, jumpForce);
 	}
 	
-	public static bool Approx(Vector3 val, Vector3 about, float range) {
-		return ( (val - about).sqrMagnitude < range*range);
-	}
-	public static bool Approx(float val, float about, float range) {
-		return(Mathf.Abs(val - about)<range);
-	}
+
 	
 	public int PowerAmmo{
 		get{return powerAmmo;}
