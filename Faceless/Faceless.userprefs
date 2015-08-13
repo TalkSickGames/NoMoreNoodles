@@ -1,8 +1,12 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\_Script\Ingredients\NPC\NPC_Behavior.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\_Script\Mechanic\Water.cs">
     <Files>
-      <File FileName="Assets\_Script\Ingredients\NPC\NPC_Behavior.cs" Line="117" Column="39" />
+      <File FileName="Assets\_Script\Avatar\Avatar_BehaviorV2.cs" Line="257" Column="61" />
+      <File FileName="Assets\_Script\Ingredients\PickUps.cs" Line="66" Column="1" />
+      <File FileName="Assets\_Script\Extension\MyEnum.cs" Line="3" Column="68" />
+      <File FileName="Assets\_Script\UI\Canvas_UI.cs" Line="39" Column="82" />
+      <File FileName="Assets\_Script\Mechanic\Water.cs" Line="75" Column="49" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
