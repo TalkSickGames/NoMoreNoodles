@@ -62,15 +62,17 @@ public class Water : MonoBehaviour{
 			float disR = Mathf.Clamp(Vector3.Distance(wtb.gameObject.transform.position+(Vector3.right*0.25f)+(Vector3.up*0.25f),pos),0.1f,1000f);
 
 			if(disL>1f){
-				wtb.leftV += Mathf.Clamp((velocity / disL )*-0.1f,-2f,2f);
+				wtb.leftV += Mathf.Clamp((velocity / disL )*-0.2f,-2f,2f);
 			}else{
 				wtb.leftV += Mathf.Clamp((velocity / disL )*0.1f,-2f,2f);
 			}
 			if(disR>1f){
-				wtb.rightV += Mathf.Clamp((velocity / disR )*-0.1f,-2f,2f);
+				wtb.rightV += Mathf.Clamp((velocity / disR )*-0.2f,-2f,2f);
 			}else{
 				wtb.rightV += Mathf.Clamp((velocity / disR )*0.1f,-2f,2f);
 			}
+			wtb.leftV = Mathf.Clamp(wtb.leftV,-0.5f,0.5f);
+			wtb.rightV = Mathf.Clamp(wtb.rightV,-0.5f,0.5f);
 		}
 		Instantiate(mySplash,new Vector3(pos.x,this.transform.position.y+1.5f,0f), Quaternion.identity);
 	}
@@ -86,8 +88,21 @@ public class Water : MonoBehaviour{
 
 		CreateWave(other.transform.position, other.attachedRigidbody.velocity.y);
 
+
 	}
 
+	void OnTriggerExit2D(Collider2D other){
+		if(other.gameObject.tag == "Player"){
+			//	GameManager.Instance.AvatarB.IsInWater = !GameManager.Instance.AvatarB.IsInWater;
+			if(other.transform.position.y < this.transform.position.y){
+				GameManager.Instance.AvatarB.IsInWater = true;
+			}
+			else{
+				GameManager.Instance.AvatarB.IsInWater = false;
+			}
+
+		}
+	}
 
 
 	public static bool Approx(float val, float about, float range) {

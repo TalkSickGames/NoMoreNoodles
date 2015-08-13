@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class Canvas_UI : MonoBehaviour {
 	public GameObject[] hearts;
 	public GameObject[] trickAmmo;
+	public GameObject[] timeAmmo;
 	public GameObject powerAmmo;
 	public GameObject trickCursor;
 	public GameObject powerCursor;
@@ -32,5 +33,10 @@ public class Canvas_UI : MonoBehaviour {
 		hearts[3].SetActive((GameManager.Instance.AvatarB.HP >= 4)?true:false);
 		hearts[4].SetActive((GameManager.Instance.AvatarB.HP >= 5)?true:false);
 		hearts[5].SetActive((GameManager.Instance.AvatarB.HP >= 6)?true:false);
+		/////////////
+
+		timeAmmo[0].SetActive((GameManager.Instance.AvatarB.TimeAmmo >= 1)?true:false);
+		timeAmmo[1].SetActive((GameManager.Instance.AvatarB.TimeAmmo >= 2)?true:false);
+		timeAmmo[2].SetActive((GameManager.Instance.AvatarB.TimeAmmo >= 3)?true:false);
 	}
 }

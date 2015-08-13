@@ -11,8 +11,10 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	
 	//time 
 	private float slowTimeFactor;
-	private float slowTimeLerp;
+	//private float slowTimeLerp;
 	private bool isSlowed;
+	private bool isSlowedTime;
+	private bool isSlowedMind;
 	private float slowTimeTime;
 	
 	//GUI
@@ -26,6 +28,8 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	private float rechargeCooldown;
 	private int trickAmmo;
 	private int powerAmmo;
+	private int timeAmmo;
+	private bool canCostTimeAmmo;
 	private float trickVelocity = 10f;
 	private float powerVelocity = 21f;
 	
@@ -42,6 +46,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	private bool isCharging;
 	private bool isChargingFromAir;
 	private bool isInWater;
+	private bool isStanced;
 	
 	//Utility
 	public LayerMask groundLayer;
@@ -90,6 +95,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 			//			if(movement.y <=-20f && movement.y >-20f){
 			//				hp -= 1;
 			//			}
+
 			if(movement.y <=-25f){
 				hp -= 1;
 				Debug.Log(movement.y.ToString());
@@ -99,16 +105,30 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		isGrounded = CheckIsGround();
 		
 		///Lerp movement and Gravity
-		if(movement.y > -25f){
-			movement = new Vector2 (movement.x, movement.y - gravity * Time.deltaTime);
+		if(!isInWater){
+			if(movement.y > -25f){
+				movement = new Vector2 (movement.x, movement.y - gravity * Time.deltaTime);
+			}
+		}else{
+			if(movement.y > -2f){
+				movement = new Vector2 (movement.x, movement.y - gravity/2f * Time.deltaTime);
+			}else{
+				movement = new Vector2 (movement.x, -2f);
+			}
 		}
 		///Action
 		
 		if(Input.GetAxis("TriggerR")>0.5f){
 			if(slowTimeTime>0f){
-				isSlowed = true;
-				slowTimeTime -= 1f * Time.deltaTime * (1f / Time.timeScale);
-				slowTimeFactor = Mathf.Lerp (slowTimeFactor, 10f, 4f * Time.deltaTime);
+				if(timeAmmo >=1 || !canCostTimeAmmo){
+					if(canCostTimeAmmo){
+						timeAmmo--;
+						canCostTimeAmmo = false;
+					}
+					isSlowed = true;
+					slowTimeTime -= 1f * Time.deltaTime * (1f / Time.timeScale);
+					slowTimeFactor = Mathf.Lerp (slowTimeFactor, 10f, 4f * Time.deltaTime);
+				}
 				
 			}else{
 				slowTimeFactor = 1f;
@@ -119,6 +139,8 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		if(Input.GetAxis("TriggerR")==0f){
 			slowTimeFactor = 1f;
 			slowTimeTime = 2f;
+			isSlowed = false;
+			canCostTimeAmmo = true;
 			
 		}
 		
@@ -131,49 +153,69 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		}
 		
 		Time.timeScale = 1f/slowTimeFactor;
-		
-		if ((Input.GetAxis("Horizontal2")>=0.5f || Input.GetAxis("Vertical2")>=0.5f )|| (Input.GetAxis("Horizontal2")<=-0.5f || Input.GetAxis("Vertical2")<=-0.5f ) ){
-			if(!isCharging){
-				timeCharge = 0f;
-			}
-			
-			isCharging = true;
-			
-			myArrow.GetComponent<SpriteRenderer>().enabled = true;
-			float angle = Mathf.Atan2(Input.GetAxis("Horizontal2")*-1f,Input.GetAxis("Vertical2")) * Mathf.Rad2Deg;
-			myArrow.transform.rotation = Quaternion.Euler(0f,0f,angle);
-			myArrow.transform.rotation = Quaternion.Euler(0f, 0f, ( Mathf.Round(myArrow.transform.rotation.eulerAngles.z/45)*45f));
-			myArrow.transform.position = this.transform.position + myArrow.transform.up*1.5f;
-			timeCharge += 20f * Time.deltaTime * (1f / Time.timeScale);
-			
-			if(!isGrounded){
-				isChargingFromAir = true;
-			}
-			
-		}else{
-			isCharging = false;
-			isChargingFromAir = false;
-			
-			if(timeCharge > 0.25f && !applied) {
-				
+
+
+		if(isInWater){
+			if ((Input.GetAxis("Horizontal2")>=0.5f || Input.GetAxis("Vertical2")>=0.5f )|| (Input.GetAxis("Horizontal2")<=-0.5f || Input.GetAxis("Vertical2")<=-0.5f ) ){
+
+				myArrow.GetComponent<SpriteRenderer>().enabled = true;
+				float angle = Mathf.Atan2(Input.GetAxis("Horizontal2")*-1f,Input.GetAxis("Vertical2")) * Mathf.Rad2Deg;
+				myArrow.transform.rotation = Quaternion.Euler(0f,0f,angle);
+				myArrow.transform.rotation = Quaternion.Euler(0f, 0f, ( Mathf.Round(myArrow.transform.rotation.eulerAngles.z/45)*45f));
+				myArrow.transform.position = this.transform.position + myArrow.transform.up*1.5f;
 				isSlowed = false;
 				applied = true;
-				chargeCooldown = 0f;
-				if(chargeIsTrick && trickAmmo >=1){
-					steamVelocity = myArrow.transform.up * trickVelocity* -1f;
-					rechargeCooldown = 0f;
-					trickAmmo -=1;
-				}
-				if(!chargeIsTrick && powerAmmo >=1){
-					steamVelocity = myArrow.transform.up * powerVelocity* -1f;
-					powerAmmo -=1;
-				}
-				
+				steamVelocity = myArrow.transform.up * trickVelocity* -1f;
 				movement.y = steamVelocity.y;
 				steamVelocity.y = 0f;
-				timeCharge = 0f;
+				chargeCooldown = 0f;
+
+			}
+		}else{
+			if ((Input.GetAxis("Horizontal2")>=0.5f || Input.GetAxis("Vertical2")>=0.5f )|| (Input.GetAxis("Horizontal2")<=-0.5f || Input.GetAxis("Vertical2")<=-0.5f ) ){
+				if(!isCharging){
+					timeCharge = 0f;
+				}
+				
+				isCharging = true;
+				
+				myArrow.GetComponent<SpriteRenderer>().enabled = true;
+				float angle = Mathf.Atan2(Input.GetAxis("Horizontal2")*-1f,Input.GetAxis("Vertical2")) * Mathf.Rad2Deg;
+				myArrow.transform.rotation = Quaternion.Euler(0f,0f,angle);
+				myArrow.transform.rotation = Quaternion.Euler(0f, 0f, ( Mathf.Round(myArrow.transform.rotation.eulerAngles.z/45)*45f));
+				myArrow.transform.position = this.transform.position + myArrow.transform.up*1.5f;
+				timeCharge += 20f * Time.deltaTime * (1f / Time.timeScale);
+				
+				if(!isGrounded){
+					isChargingFromAir = true;
+				}
+				
+			}else{
+				isCharging = false;
+				isChargingFromAir = false;
+	
+				if(timeCharge > 0.25f && !applied) {
+					
+					isSlowed = false;
+					applied = true;
+					chargeCooldown = 0f;
+					if(chargeIsTrick && trickAmmo >=1){
+						steamVelocity = myArrow.transform.up * trickVelocity* -1f;
+						rechargeCooldown = 0f;
+						trickAmmo -=1;
+					}
+					if(!chargeIsTrick && powerAmmo >=1){
+						steamVelocity = myArrow.transform.up * powerVelocity* -1f;
+						powerAmmo -=1;
+					}
+					
+					movement.y = steamVelocity.y;
+					steamVelocity.y = 0f;
+					timeCharge = 0f;
+				}
 			}
 		}
+
 		
 		
 		
@@ -200,7 +242,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 			steamVelocity = Vector2.zero;
 		}
 		//Debug.Log (steamVelocity);
-		if (Input.GetButtonDown("Fire1") && isGrounded) {
+		if ((Input.GetButtonDown("Fire1") && isGrounded) || (isInWater && Input.GetButtonDown("Fire1"))) {
 			isSlowed = false;
 			Jump ();
 		}
@@ -212,7 +254,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 			moveSpeedRamp = Mathf.Lerp(moveSpeedRamp, Input.GetAxisRaw ("Horizontal"), 30f * Time.deltaTime);
 			
 		}
-		movement = new Vector2 (Input.GetAxisRaw ("Horizontal") * moveSpeed * Mathf.Abs( moveSpeedRamp), movement.y);
+		movement = new Vector2 (Input.GetAxisRaw ("Horizontal") * ((isInWater)? moveSpeed/2f:moveSpeed) * Mathf.Abs( moveSpeedRamp), movement.y);
 		
 		//myAnimator.SetBool("isMoving",(!Approx(movement.x,0f,1f))?true:false);
 		myAnimator.SetBool ("isGrounded", isGrounded);
@@ -236,19 +278,40 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	
 	
 	public void Jump(){
-		movement = new Vector2 (movement.x, jumpForce);
+		movement = new Vector2 (movement.x, ((isInWater)? jumpForce/2f:jumpForce));
 	}
 	
 
-	
+	public bool IsInWater{
+		get {return isInWater;}
+		set{isInWater = value;}
+	}
+
 	public int PowerAmmo{
 		get{return powerAmmo;}
-		set{powerAmmo = value;}
+		set{
+
+			powerAmmo = value;
+			if (powerAmmo > 1){
+				powerAmmo = 1;
+			}
+		
+		}
 	}
 	
 	public int TrickAmmo{
 		get{return trickAmmo;}
 		set{trickAmmo = value;}
+	}
+
+	public int TimeAmmo{
+		get{return timeAmmo;}
+		set{	
+			timeAmmo = value;
+			if (timeAmmo > 3){
+				timeAmmo = 3;
+			}
+		}
 	}
 	
 	public int HP{

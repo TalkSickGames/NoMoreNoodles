@@ -21,7 +21,9 @@ public class PickUps : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D other) {
 		if(other.gameObject.tag == "Player"){
 			switch(myType){
-				
+			case PickupType.Focus :
+				GameManager.Instance.AvatarB.TimeAmmo += 1;
+				break;	
 			case PickupType.Ammo :
 				GameManager.Instance.AvatarB.PowerAmmo += 1;
 				break;
