@@ -190,10 +190,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 6
-  jumpForce: 13
-  gravity: 35
+  jumpForce: 11
+  gravity: 25
   myArrow: {fileID: 113490}
   myCircle: {fileID: 134732}
+  trickVelocity: 7.5999999
+  powerVelocity: 18
   hp: 0
   groundLayer:
     serializedVersion: 2
@@ -297,11 +299,11 @@ Prefab:
       objectReference: {fileID: 6200000, guid: 5ea69b4ac34de8049a844f12188e46c1, type: 2}
     - target: {fileID: 0}
       propertyPath: gravity
-      value: 35
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: jumpForce
-      value: 13
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_Radius
@@ -322,6 +324,34 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_Interpolate
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: hp
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: myArrow
+      value: 
+      objectReference: {fileID: 113490}
+    - target: {fileID: 0}
+      propertyPath: myCircle
+      value: 
+      objectReference: {fileID: 134732}
+    - target: {fileID: 0}
+      propertyPath: trickVelocity
+      value: 7.5999999
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: powerVelocity
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: moveSpeed
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: groundLayer.m_Bits
+      value: 256
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

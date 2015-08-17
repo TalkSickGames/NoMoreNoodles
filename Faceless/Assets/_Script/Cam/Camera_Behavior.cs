@@ -29,7 +29,8 @@ public class Camera_Behavior : MonoBehaviour {
 		Vector3 aheadTargetPos = target.position + offset;
 		Vector3 newPos;
 		newPos.x = Vector3.SmoothDamp(transform.position, aheadTargetPos, ref currentVelocity, xDamping).x;
-		newPos.y = Vector3.MoveTowards(transform.position, target.position, yDamping * 100 * Time.deltaTime).y;
+		newPos.y = Vector3.SmoothDamp(transform.position, aheadTargetPos, ref currentVelocity, yDamping).y;
+		//newPos.y = Vector3.MoveTowards(transform.position, aheadTargetPos, yDamping * 100 * Time.deltaTime).y;
 		newPos.z = offset.z;
 		
 		transform.position = newPos;
