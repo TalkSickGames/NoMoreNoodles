@@ -60,7 +60,7 @@ public class NPC_Behavior : MonoBehaviour {
 			}
 
 			if (!Physics2D.Raycast ((Vector2)this.transform.position + (Vector2.right*Mathf.Sign(speed)*0.5f),Vector2.down,0.8f)) {
-				Debug.Log("Jump Down");
+				//Debug.Log("Jump Down");
 				if(CheckForJumpHeightDown((Vector2)this.transform.position + Vector2.right*Mathf.Sign(speed) * 1f) != default(Vector3)){
 					Jump(CheckForJumpHeight((Vector2)this.transform.position + Vector2.right*Mathf.Sign(speed) * 1f));
 				}else{

@@ -89,19 +89,15 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		
 		myArrow.GetComponent<SpriteRenderer> ().enabled = false;
 		
-		movement = myRigid.velocity;
+
 		
 		if(!isGrounded && CheckIsGround()){
-			//			if(movement.y <=-20f && movement.y >-20f){
-			//				hp -= 1;
-			//			}
-
-			if(movement.y <=-25f){
+			if(movement.y <= -24f){
 				hp -= 1;
 				Debug.Log(movement.y.ToString());
 			}
 		}
-		
+		movement = myRigid.velocity;
 		isGrounded = CheckIsGround();
 
 		if(isGrounded){
@@ -206,7 +202,9 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 					chargeCooldown = 0f;
 					if(chargeIsTrick && trickAmmo >=1){
 						steamVelocity = myArrow.transform.up * trickVelocity* -1f;
-						rechargeCooldown = 0f;
+						if(trickAmmo == 4){
+							rechargeCooldown = 0f;
+						}
 						trickAmmo -=1;
 					}
 					if(!chargeIsTrick && powerAmmo >=1){
