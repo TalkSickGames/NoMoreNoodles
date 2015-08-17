@@ -30,8 +30,8 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	private int powerAmmo;
 	private int timeAmmo;
 	private bool canCostTimeAmmo;
-	private float trickVelocity = 10f;
-	private float powerVelocity = 21f;
+	public float trickVelocity = 10f;
+	public float powerVelocity = 21f;
 	
 	//life stuff
 	public int hp;
@@ -103,7 +103,12 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		}
 		
 		isGrounded = CheckIsGround();
-		
+
+		if(isGrounded){
+			moveSpeed = 6f;
+		}else{
+			moveSpeed = 5f;
+		}
 		///Lerp movement and Gravity
 		if(!isInWater){
 			if(movement.y > -25f){
@@ -249,9 +254,9 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		if(!Mathfx.Approx(Input.GetAxisRaw ("Horizontal"),0f,0.1f)){
 			
 			
-			moveSpeedRamp = Mathf.Lerp(moveSpeedRamp, Input.GetAxisRaw ("Horizontal"), 10f * Time.deltaTime);
+			moveSpeedRamp = Mathf.Lerp(moveSpeedRamp, Input.GetAxisRaw ("Horizontal"), 7.5f * Time.deltaTime);
 		}else{
-			moveSpeedRamp = Mathf.Lerp(moveSpeedRamp, Input.GetAxisRaw ("Horizontal"), 30f * Time.deltaTime);
+			moveSpeedRamp = Mathf.Lerp(moveSpeedRamp, Input.GetAxisRaw ("Horizontal"), 5f * Time.deltaTime);
 			
 		}
 		movement = new Vector2 (Input.GetAxisRaw ("Horizontal") * ((isInWater)? moveSpeed/2f:moveSpeed) * Mathf.Abs( moveSpeedRamp), movement.y);
