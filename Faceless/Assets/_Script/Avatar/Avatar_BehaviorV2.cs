@@ -58,6 +58,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	private Rigidbody2D myRigid;
 	private BoxCollider2D myBox;
 	private Animator myAnimator;
+	public GameObject mySprite;
 	
 	void Start(){
 		myRigid = GetComponent<Rigidbody2D> ();
@@ -258,8 +259,21 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 			
 		}
 		movement = new Vector2 (Input.GetAxisRaw ("Horizontal") * ((isInWater)? moveSpeed/2f:moveSpeed) * Mathf.Abs( moveSpeedRamp), movement.y);
+
+		Quaternion tempV30 = Quaternion.Euler( new Vector3 (0f, 0f, 0f));
+		Quaternion tempV38 = Quaternion.Euler( new Vector3 (0f, 180f, 0f));
 		
-		//myAnimator.SetBool("isMoving",(!Approx(movement.x,0f,1f))?true:false);
+
+		if (movement.x < -0.1f) {
+			mySprite.transform.rotation = tempV38;
+		
+		} 
+		if (movement.x > 0.1f) {
+			mySprite.transform.rotation = tempV30;
+		}
+		myAnimator.SetBool("isMoving",(Mathf.Abs(movement.x)>0f));
+		myAnimator.SetBool("isRunning",(Mathf.Abs(movement.x)>=5f));
+		myAnimator.SetBool("isWalking",(Mathf.Abs(movement.x)<5f && Mathf.Abs(movement.x)>0f));
 		myAnimator.SetBool ("isGrounded", isGrounded);
 		
 		//movement = new Vector2 (Mathf.Clamp (movement.x, -15f, 15f), Mathf.Clamp (movement.y, -20f,20f));
