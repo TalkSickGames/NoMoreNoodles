@@ -46,8 +46,9 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	private bool isCharging;
 	private bool isChargingFromAir;
 	private bool isInWater;
-	private bool isStanced;
-	
+	private bool isAffected;
+	private bool isGravityed;
+
 	//Utility
 	public LayerMask groundLayer;
 	private Vector2 movement;
@@ -100,6 +101,12 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		}
 		movement = myRigid.velocity;
 		isGrounded = CheckIsGround();
+		if(Mathfx.Approx(steamVelocity.x,0f,3f)/* && Mathfx.Approx(steamVelocity.y,0f,3f)*/){
+			isAffected = false;
+			isGravityed = true;
+		}else{
+			isAffected = true;
+		}
 
 		if(isGrounded){
 			moveSpeed = 6f;
@@ -108,7 +115,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		}
 		///Lerp movement and Gravity
 		if(!isInWater){
-			if(movement.y > -25f){
+			if(movement.y > -25f && isGravityed){
 				movement = new Vector2 (movement.x, movement.y - gravity * Time.deltaTime);
 			}
 		}else{
@@ -214,6 +221,10 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 					}
 					
 					movement.y = steamVelocity.y;
+					if(Mathfx.Approx(steamVelocity.y,0f,1f)){
+						Debug.Log("yaos");
+						isGravityed = false;
+					}
 					steamVelocity.y = 0f;
 					timeCharge = 0f;
 				}
@@ -273,7 +284,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		}
 		myAnimator.SetBool("isMoving",(Mathf.Abs(movement.x)>0f));
 		myAnimator.SetBool("isRunning",(Mathf.Abs(movement.x)>=5f));
-		myAnimator.SetBool("isWalking",(Mathf.Abs(movement.x)<5f && Mathf.Abs(movement.x)>0f));
+		myAnimator.SetBool("isWalking",(Mathf.Abs(movement.x)<5f && Mathf.Abs(movement.x)>0.1f));
 		myAnimator.SetBool ("isGrounded", isGrounded);
 		
 		//movement = new Vector2 (Mathf.Clamp (movement.x, -15f, 15f), Mathf.Clamp (movement.y, -20f,20f));
