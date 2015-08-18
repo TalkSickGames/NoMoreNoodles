@@ -102,7 +102,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 106288}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.0189999994, y: .148000002, z: 0}
+  m_LocalPosition: {x: -.0189999994, y: .342000008, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 410280}
@@ -142,7 +142,7 @@ CircleCollider2D:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 199672}
   m_Enabled: 1
-  m_Material: {fileID: 6200000, guid: 5ea69b4ac34de8049a844f12188e46c1, type: 2}
+  m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: -.49000001}
@@ -160,7 +160,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: .0599999987}
   serializedVersion: 2
-  m_Size: {x: .100000001, y: 1.10000002}
+  m_Size: {x: .200000003, y: 1.10000002}
 --- !u!95 &9517556
 Animator:
   serializedVersion: 3
@@ -353,6 +353,14 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: groundLayer.m_Bits
       value: 256
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_LocalPosition.y
+      value: .342000008
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Mass
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
