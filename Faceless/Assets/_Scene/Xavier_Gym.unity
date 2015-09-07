@@ -3946,7 +3946,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 11
 --- !u!1 &623906062
 GameObject:
   m_ObjectHideFlags: 0
@@ -5217,7 +5217,7 @@ RectTransform:
   - {fileID: 1200742457}
   - {fileID: 405607253}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -6960,60 +6960,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1200742456}
---- !u!1001 &1208700296
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 433604, guid: 1b673cd849b22484da94cc4eb6d356ba, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: -13.0799999
-      objectReference: {fileID: 0}
-    - target: {fileID: 433604, guid: 1b673cd849b22484da94cc4eb6d356ba, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: -4.40999985
-      objectReference: {fileID: 0}
-    - target: {fileID: 433604, guid: 1b673cd849b22484da94cc4eb6d356ba, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 433604, guid: 1b673cd849b22484da94cc4eb6d356ba, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: -.612372577
-      objectReference: {fileID: 0}
-    - target: {fileID: 433604, guid: 1b673cd849b22484da94cc4eb6d356ba, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: -.353553236
-      objectReference: {fileID: 0}
-    - target: {fileID: 433604, guid: 1b673cd849b22484da94cc4eb6d356ba, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: .353553265
-      objectReference: {fileID: 0}
-    - target: {fileID: 433604, guid: 1b673cd849b22484da94cc4eb6d356ba, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: .612372577
-      objectReference: {fileID: 0}
-    - target: {fileID: 433604, guid: 1b673cd849b22484da94cc4eb6d356ba, type: 2}
-      propertyPath: m_RootOrder
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 19833762, guid: 1b673cd849b22484da94cc4eb6d356ba, type: 2}
-      propertyPath: CollisionModule.energyLossOnCollision
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 19833762, guid: 1b673cd849b22484da94cc4eb6d356ba, type: 2}
-      propertyPath: CollisionModule.minKillSpeed
-      value: .100000001
-      objectReference: {fileID: 0}
-    - target: {fileID: 19833762, guid: 1b673cd849b22484da94cc4eb6d356ba, type: 2}
-      propertyPath: CollisionModule.bounce
-      value: .200000003
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 1b673cd849b22484da94cc4eb6d356ba, type: 2}
-  m_IsPrefabParent: 0
 --- !u!1 &1216808823
 GameObject:
   m_ObjectHideFlags: 0

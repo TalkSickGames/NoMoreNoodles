@@ -20,6 +20,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	//GUI
 	public GameObject myArrow;
 	public GameObject myCircle;
+	public GameObject myPart;
 	
 	//Ammo and charge
 	private bool chargeIsTrick;
@@ -38,6 +39,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	
 	
 	//State! :D
+	private bool isOnLedge;
 	private bool isJumping;
 	private bool isFalling;
 	private bool isTakingDamage;
@@ -96,7 +98,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		if(!isGrounded && CheckIsGround()){
 			if(movement.y <= -24f){
 				hp -= 1;
-				Debug.Log(movement.y.ToString());
+				//Debug.Log(movement.y.ToString());
 			}
 		}
 		movement = myRigid.velocity;
@@ -169,12 +171,16 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 
 				myArrow.GetComponent<SpriteRenderer>().enabled = true;
 				float angle = Mathf.Atan2(Input.GetAxis("Horizontal2")*-1f,Input.GetAxis("Vertical2")) * Mathf.Rad2Deg;
-				myArrow.transform.rotation = Quaternion.Euler(0f,0f,angle);
-				myArrow.transform.rotation = Quaternion.Euler(0f, 0f, ( Mathf.Round(myArrow.transform.rotation.eulerAngles.z/45)*45f));
+//				myArrow.transform.rotation = Quaternion.Euler(0f,0f,angle);
+//				myArrow.transform.rotation = Quaternion.Euler(0f, 0f, ( Mathf.Round(myArrow.transform.rotation.eulerAngles.z/45)*45f));
+				myArrow.transform.rotation = Quaternion.Euler(0f, 0f, ( Mathf.Round(angle/45f)*45f));
 				myArrow.transform.position = this.transform.position + myArrow.transform.up*1.5f;
 				isSlowed = false;
 				applied = true;
 				steamVelocity = myArrow.transform.up * trickVelocity* -1f;
+				StartParticle();
+				CancelInvoke("StopParticle");
+				Invoke("StopParticle",0.15f);
 				movement.y = steamVelocity.y;
 				steamVelocity.y = 0f;
 				chargeCooldown = 0f;
@@ -190,8 +196,9 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 				
 				myArrow.GetComponent<SpriteRenderer>().enabled = true;
 				float angle = Mathf.Atan2(Input.GetAxis("Horizontal2")*-1f,Input.GetAxis("Vertical2")) * Mathf.Rad2Deg;
-				myArrow.transform.rotation = Quaternion.Euler(0f,0f,angle);
-				myArrow.transform.rotation = Quaternion.Euler(0f, 0f, ( Mathf.Round(myArrow.transform.rotation.eulerAngles.z/45)*45f));
+//				myArrow.transform.rotation = Quaternion.Euler(0f,0f,angle);
+//				myArrow.transform.rotation = Quaternion.Euler(0f, 0f, ( Mathf.Round(myArrow.transform.rotation.eulerAngles.z/45)*45f));
+				myArrow.transform.rotation = Quaternion.Euler(0f, 0f, ( Mathf.Round(angle/45f)*45f));
 				myArrow.transform.position = this.transform.position + myArrow.transform.up*1.5f;
 				timeCharge += 20f * Time.deltaTime * (1f / Time.timeScale);
 				
@@ -210,6 +217,9 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 					chargeCooldown = 0f;
 					if(chargeIsTrick && trickAmmo >=1){
 						steamVelocity = myArrow.transform.up * trickVelocity* -1f;
+						StartParticle();
+						CancelInvoke("StopParticle");
+						Invoke("StopParticle",0.15f);
 						if(trickAmmo == 4){
 							rechargeCooldown = 0f;
 						}
@@ -217,12 +227,15 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 					}
 					if(!chargeIsTrick && powerAmmo >=1){
 						steamVelocity = myArrow.transform.up * powerVelocity* -1f;
+						StartParticle();
+						CancelInvoke("StopParticle");
+						Invoke("StopParticle",0.5f);
 						powerAmmo -=1;
 					}
 					
 					movement.y = steamVelocity.y;
 					if(Mathfx.Approx(steamVelocity.y,0f,1f)){
-						Debug.Log("yaos");
+						//Debug.Log("yaos");
 						isGravityed = false;
 					}
 					steamVelocity.y = 0f;
@@ -303,7 +316,14 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 			return false;
 		}
 	}
-	
+
+	void StopParticle(){
+		myPart.GetComponent<ParticleSystem>().enableEmission = false;
+	}
+
+	void StartParticle(){
+		myPart.GetComponent<ParticleSystem>().enableEmission = true;
+	}
 	
 	public void Jump(){
 		movement = new Vector2 (movement.x, ((isInWater)? jumpForce/2f:jumpForce));
@@ -313,6 +333,11 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	public bool IsInWater{
 		get {return isInWater;}
 		set{isInWater = value;}
+	}
+
+	public bool Applied{
+		get {return applied;}
+		set{applied = value;}
 	}
 
 	public int PowerAmmo{
