@@ -46,9 +46,9 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	private bool isMoving;
 	private bool isGrounded;
 	private bool isCharging;
-	private bool isChargingFromAir;
+	//private bool isChargingFromAir;
 	private bool isInWater;
-	private bool isAffected;
+//	private bool isAffected;
 	private bool isGravityed;
 
 	//Utility
@@ -56,6 +56,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	private Vector2 movement;
 	private Vector2 steamVelocity;
 	private float timeCharge;
+
 	
 	//reference
 	private Rigidbody2D myRigid;
@@ -95,7 +96,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		
 
 		
-		if(!isGrounded && CheckIsGround()){
+		if(!isGrounded && CheckIsGround() && !isInWater){
 			if(movement.y <= -24f){
 				hp -= 1;
 				//Debug.Log(movement.y.ToString());
@@ -104,26 +105,27 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		movement = myRigid.velocity;
 		isGrounded = CheckIsGround();
 		if(Mathfx.Approx(steamVelocity.x,0f,3f)/* && Mathfx.Approx(steamVelocity.y,0f,3f)*/){
-			isAffected = false;
+
 			isGravityed = true;
-		}else{
-			isAffected = true;
 		}
+
 
 		if(isGrounded){
 			moveSpeed = 6f;
 		}else{
 			moveSpeed = 5f;
 		}
+
 		///Lerp movement and Gravity
 		if(!isInWater){
 			if(movement.y > -25f && isGravityed){
 				movement = new Vector2 (movement.x, movement.y - gravity * Time.deltaTime);
 			}
 		}else{
-			if(movement.y > -2f){
+			if(movement.y > -2f || CheckIsUsingRightJoystick()){
 				movement = new Vector2 (movement.x, movement.y - gravity/2f * Time.deltaTime);
-			}else{
+			}
+			else{
 				movement = new Vector2 (movement.x, -2f);
 			}
 		}
@@ -167,48 +169,38 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 
 
 		if(isInWater){
-			if ((Input.GetAxis("Horizontal2")>=0.5f || Input.GetAxis("Vertical2")>=0.5f )|| (Input.GetAxis("Horizontal2")<=-0.5f || Input.GetAxis("Vertical2")<=-0.5f ) ){
+			if (CheckIsUsingRightJoystick()){
 
-				myArrow.GetComponent<SpriteRenderer>().enabled = true;
-				float angle = Mathf.Atan2(Input.GetAxis("Horizontal2")*-1f,Input.GetAxis("Vertical2")) * Mathf.Rad2Deg;
-//				myArrow.transform.rotation = Quaternion.Euler(0f,0f,angle);
-//				myArrow.transform.rotation = Quaternion.Euler(0f, 0f, ( Mathf.Round(myArrow.transform.rotation.eulerAngles.z/45)*45f));
-				myArrow.transform.rotation = Quaternion.Euler(0f, 0f, ( Mathf.Round(angle/45f)*45f));
-				myArrow.transform.position = this.transform.position + myArrow.transform.up*1.5f;
+				SetArrow();
 				isSlowed = false;
 				applied = true;
-				steamVelocity = myArrow.transform.up * trickVelocity* -1f;
+				steamVelocity = Vector2.Lerp(steamVelocity,( myArrow.transform.up * trickVelocity* -2f),10f*Time.deltaTime);
 				StartParticle();
 				CancelInvoke("StopParticle");
 				Invoke("StopParticle",0.15f);
-				movement.y = steamVelocity.y;
+				movement.y = steamVelocity.y*3f;
+				//movement.y = Mathf.Lerp(movement.y, steamVelocity.y,10f*Time.deltaTime);
 				steamVelocity.y = 0f;
 				chargeCooldown = 0f;
 
 			}
 		}else{
-			if ((Input.GetAxis("Horizontal2")>=0.5f || Input.GetAxis("Vertical2")>=0.5f )|| (Input.GetAxis("Horizontal2")<=-0.5f || Input.GetAxis("Vertical2")<=-0.5f ) ){
+			if (CheckIsUsingRightJoystick()){
 				if(!isCharging){
 					timeCharge = 0f;
 				}
 				
 				isCharging = true;
-				
-				myArrow.GetComponent<SpriteRenderer>().enabled = true;
-				float angle = Mathf.Atan2(Input.GetAxis("Horizontal2")*-1f,Input.GetAxis("Vertical2")) * Mathf.Rad2Deg;
-//				myArrow.transform.rotation = Quaternion.Euler(0f,0f,angle);
-//				myArrow.transform.rotation = Quaternion.Euler(0f, 0f, ( Mathf.Round(myArrow.transform.rotation.eulerAngles.z/45)*45f));
-				myArrow.transform.rotation = Quaternion.Euler(0f, 0f, ( Mathf.Round(angle/45f)*45f));
-				myArrow.transform.position = this.transform.position + myArrow.transform.up*1.5f;
+				SetArrow();
 				timeCharge += 20f * Time.deltaTime * (1f / Time.timeScale);
 				
-				if(!isGrounded){
-					isChargingFromAir = true;
-				}
+//				if(!isGrounded){
+//					isChargingFromAir = true;
+//				}
 				
 			}else{
 				isCharging = false;
-				isChargingFromAir = false;
+				//isChargingFromAir = false;
 	
 				if(timeCharge > 0.25f && !applied) {
 					
@@ -234,10 +226,11 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 					}
 					
 					movement.y = steamVelocity.y;
+
 					if(Mathfx.Approx(steamVelocity.y,0f,1f)){
-						//Debug.Log("yaos");
 						isGravityed = false;
 					}
+
 					steamVelocity.y = 0f;
 					timeCharge = 0f;
 				}
@@ -315,6 +308,21 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		} else {
 			return false;
 		}
+	}
+
+	bool CheckIsUsingRightJoystick(){
+		if ((Input.GetAxis("Horizontal2")>=0.5f || Input.GetAxis("Vertical2")>=0.5f )|| (Input.GetAxis("Horizontal2")<=-0.5f || Input.GetAxis("Vertical2")<=-0.5f ) ){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	void SetArrow(){
+		myArrow.GetComponent<SpriteRenderer>().enabled = true;
+		float angle = Mathf.Atan2(Input.GetAxis("Horizontal2")*-1f,Input.GetAxis("Vertical2")) * Mathf.Rad2Deg;
+		myArrow.transform.rotation = Quaternion.Euler(0f, 0f, ( Mathf.Round(angle/45f)*45f));
+		myArrow.transform.position = this.transform.position + myArrow.transform.up*1.5f;
 	}
 
 	void StopParticle(){
