@@ -79,6 +79,7 @@ GameObject:
   - 114: {fileID: 11499642}
   - 61: {fileID: 6102416}
   - 58: {fileID: 5821056}
+  - 58: {fileID: 5845902}
   m_Layer: 0
   m_Name: Avatar
   m_TagString: Player
@@ -173,12 +174,25 @@ CircleCollider2D:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 199672}
   m_Enabled: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 5ea69b4ac34de8049a844f12188e46c1, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_Offset: {x: 0, y: -.49000001}
+  m_Offset: {x: 0, y: -.460000008}
   serializedVersion: 2
-  m_Radius: .100000001
+  m_Radius: .109999999
+--- !u!58 &5845902
+CircleCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 199672}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 5ea69b4ac34de8049a844f12188e46c1, type: 2}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: .600000024}
+  serializedVersion: 2
+  m_Radius: .109999999
 --- !u!61 &6102416
 BoxCollider2D:
   m_ObjectHideFlags: 1

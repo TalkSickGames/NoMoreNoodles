@@ -39,7 +39,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	
 	
 	//State! :D
-	private bool isOnLedge;
+	private bool isLedge;
 	private bool isJumping;
 	private bool isFalling;
 	private bool isTakingDamage;
@@ -56,6 +56,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	private Vector2 movement;
 	private Vector2 steamVelocity;
 	private float timeCharge;
+	private bool isOnLeftLedge;
 
 	
 	//reference
@@ -117,18 +118,36 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		}
 
 		///Lerp movement and Gravity
-		if(!isInWater){
-			if(movement.y > -25f && isGravityed){
-				movement = new Vector2 (movement.x, movement.y - gravity * Time.deltaTime);
-			}
-		}else{
-			if(movement.y > -2f || CheckIsUsingRightJoystick()){
-				movement = new Vector2 (movement.x, movement.y - gravity/2f * Time.deltaTime);
-			}
-			else{
-				movement = new Vector2 (movement.x, -2f);
+		if(!isLedge){
+			if(!isInWater){
+				if(movement.y > -25f && isGravityed){
+					movement = new Vector2 (movement.x, movement.y - gravity * Time.deltaTime);
+				}
+			}else{
+				if(movement.y > -2f || CheckIsUsingRightJoystick()){
+					movement = new Vector2 (movement.x, movement.y - gravity/2f * Time.deltaTime);
+				}
+				else{
+					movement = new Vector2 (movement.x, -2f);
+				}
 			}
 		}
+		if(movement.y <=0f && !Physics2D.Raycast(this.transform.position,Vector2.down,1.2f,groundLayer)){
+			if(Physics2D.Raycast(this.transform.position+(Vector3.up*1f),Vector2.left,0.5f,groundLayer)&& !Physics2D.Raycast(this.transform.position+(Vector3.up*1.2f),Vector2.left,0.5f,groundLayer) && Input.GetAxisRaw ("Horizontal")<-0.2f){
+				isLedge = true;
+				isOnLeftLedge = true;
+				movement = Vector2.zero;
+
+			}
+
+			if(Physics2D.Raycast(this.transform.position+(Vector3.up*1f),Vector2.right,0.5f,groundLayer)&& !Physics2D.Raycast(this.transform.position+(Vector3.up*1.2f),Vector2.right,0.5f,groundLayer) && Input.GetAxisRaw ("Horizontal")>0.2f){
+				isLedge = true;
+				isOnLeftLedge = false;
+				movement = Vector2.zero;
+				
+			}
+		}
+	
 		///Action
 		
 		if(Input.GetAxis("TriggerR")>0.5f){
@@ -174,11 +193,12 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 				SetArrow();
 				isSlowed = false;
 				applied = true;
-				steamVelocity = Vector2.Lerp(steamVelocity,( myArrow.transform.up * trickVelocity* -2f),10f*Time.deltaTime);
+				steamVelocity = Vector2.Lerp(steamVelocity,( myArrow.transform.up * trickVelocity* -4f),2f*Time.deltaTime);
 				StartParticle();
 				CancelInvoke("StopParticle");
 				Invoke("StopParticle",0.15f);
-				movement.y = steamVelocity.y*3f;
+				movement.y = steamVelocity.y*4f;
+				isLedge = false;
 				//movement.y = Mathf.Lerp(movement.y, steamVelocity.y,10f*Time.deltaTime);
 				steamVelocity.y = 0f;
 				chargeCooldown = 0f;
@@ -230,7 +250,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 					if(Mathfx.Approx(steamVelocity.y,0f,1f)){
 						isGravityed = false;
 					}
-
+					isLedge = false;
 					steamVelocity.y = 0f;
 					timeCharge = 0f;
 				}
@@ -263,15 +283,33 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 			steamVelocity = Vector2.zero;
 		}
 		//Debug.Log (steamVelocity);
-		if ((Input.GetButtonDown("Fire1") && isGrounded) || (isInWater && Input.GetButtonDown("Fire1"))) {
+		if ((Input.GetButtonDown("Fire1") && isGrounded) || (isInWater && Input.GetButtonDown("Fire1")) || (isLedge && Input.GetButtonDown("Fire1"))) {
 			isSlowed = false;
 			Jump ();
+			if(isLedge){
+				if(isOnLeftLedge){
+					steamVelocity.x = 10f;
+				}else{
+					steamVelocity.x = -10f;
+				}
+			}
+			isLedge = false;
 		}
 		if(!Mathfx.Approx(Input.GetAxisRaw ("Horizontal"),0f,0.1f)){
-			
+			if(isOnLeftLedge && Input.GetAxisRaw ("Horizontal")>0.5f){
+				isLedge = false;
+			}
+
+			if(!isOnLeftLedge && Input.GetAxisRaw ("Horizontal")<-0.5f){
+				isLedge = false;
+			}
 			
 			moveSpeedRamp = Mathf.Lerp(moveSpeedRamp, Input.GetAxisRaw ("Horizontal"), 7.5f * Time.deltaTime);
 		}else{
+			if(isGrounded){
+				steamVelocity.x = 0f;
+			}
+			isLedge = false;
 			moveSpeedRamp = Mathf.Lerp(moveSpeedRamp, Input.GetAxisRaw ("Horizontal"), 5f * Time.deltaTime);
 			
 		}
@@ -290,9 +328,9 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		}
 		myAnimator.SetBool("isMoving",(Mathf.Abs(movement.x)>0f));
 		myAnimator.SetBool("isRunning",(Mathf.Abs(movement.x)>=5f));
-		myAnimator.SetBool("isWalking",(Mathf.Abs(movement.x)<5f && Mathf.Abs(movement.x)>0.1f));
+		myAnimator.SetBool("isWalking",(Mathf.Abs(movement.x)<5f && Mathf.Abs(movement.x)>0.2f));
 		myAnimator.SetBool ("isGrounded", isGrounded);
-		
+		myAnimator.SetBool ("isLedge", isLedge);
 		//movement = new Vector2 (Mathf.Clamp (movement.x, -15f, 15f), Mathf.Clamp (movement.y, -20f,20f));
 		
 		
