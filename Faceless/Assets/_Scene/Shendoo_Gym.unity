@@ -6527,6 +6527,7 @@ MonoBehaviour:
   - {fileID: 2058166504}
   - {fileID: 2136967566}
   - {fileID: 647301583}
+  timeAmmo: []
   powerAmmo: {fileID: 205001892}
   trickCursor: {fileID: 117445522}
   powerCursor: {fileID: 999254212}
