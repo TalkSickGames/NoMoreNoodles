@@ -57,6 +57,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	private Vector2 steamVelocity;
 	private float timeCharge;
 	private bool isOnLeftLedge;
+	private bool desactivateNextFrame;
 
 	
 	//reference
@@ -64,7 +65,8 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	private BoxCollider2D myBox;
 	private Animator myAnimator;
 	public GameObject mySprite;
-	
+	public GameObject myBurst;
+
 	void Start(){
 		myRigid = GetComponent<Rigidbody2D> ();
 		myBox = GetComponent<BoxCollider2D> ();
@@ -74,8 +76,15 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	}
 	
 	void Update () {
-		
-		
+		if(desactivateNextFrame){
+			myBurst.GetComponent<PolygonCollider2D>().enabled = false;
+			desactivateNextFrame = false;
+		}
+		if(myBurst.GetComponent<PolygonCollider2D>().enabled == true){
+			desactivateNextFrame = true;
+		}
+
+
 		chargeCooldown += 1f * Time.deltaTime * (1f / Time.timeScale);
 		rechargeCooldown += 1f * Time.deltaTime * (1f / Time.timeScale);
 		
@@ -133,14 +142,14 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 			}
 		}
 		if(movement.y <=0f && !Physics2D.Raycast(this.transform.position,Vector2.down,1.2f,groundLayer)){
-			if(Physics2D.Raycast(this.transform.position+(Vector3.up*1f),Vector2.left,0.5f,groundLayer)&& !Physics2D.Raycast(this.transform.position+(Vector3.up*1.2f),Vector2.left,0.5f,groundLayer) && Input.GetAxisRaw ("Horizontal")<-0.2f){
+			if(Physics2D.Raycast(this.transform.position+(Vector3.up*0.75f),Vector2.left,0.5f,groundLayer)&& !Physics2D.Raycast(this.transform.position+(Vector3.up*1.2f),Vector2.left,0.5f,groundLayer) && Input.GetAxisRaw ("Horizontal")<-0.2f){
 				isLedge = true;
 				isOnLeftLedge = true;
 				movement = Vector2.zero;
 
 			}
 
-			if(Physics2D.Raycast(this.transform.position+(Vector3.up*1f),Vector2.right,0.5f,groundLayer)&& !Physics2D.Raycast(this.transform.position+(Vector3.up*1.2f),Vector2.right,0.5f,groundLayer) && Input.GetAxisRaw ("Horizontal")>0.2f){
+			if(Physics2D.Raycast(this.transform.position+(Vector3.up*0.75f),Vector2.right,0.5f,groundLayer)&& !Physics2D.Raycast(this.transform.position+(Vector3.up*1.2f),Vector2.right,0.5f,groundLayer) && Input.GetAxisRaw ("Horizontal")>0.2f){
 				isLedge = true;
 				isOnLeftLedge = false;
 				movement = Vector2.zero;
@@ -236,6 +245,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 							rechargeCooldown = 0f;
 						}
 						trickAmmo -=1;
+						myBurst.GetComponent<burst>().isTrick = true;
 					}
 					if(!chargeIsTrick && powerAmmo >=1){
 						steamVelocity = myArrow.transform.up * powerVelocity* -1f;
@@ -243,6 +253,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 						CancelInvoke("StopParticle");
 						Invoke("StopParticle",0.5f);
 						powerAmmo -=1;
+						myBurst.GetComponent<burst>().isTrick = false;
 					}
 					
 					movement.y = steamVelocity.y;
@@ -253,6 +264,8 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 					isLedge = false;
 					steamVelocity.y = 0f;
 					timeCharge = 0f;
+					myBurst.GetComponent<PolygonCollider2D>().enabled = true;
+
 				}
 			}
 		}
@@ -288,9 +301,9 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 			Jump ();
 			if(isLedge){
 				if(isOnLeftLedge){
-					steamVelocity.x = 10f;
+					steamVelocity.x = 5f;
 				}else{
-					steamVelocity.x = -10f;
+					steamVelocity.x = -5f;
 				}
 			}
 			isLedge = false;
