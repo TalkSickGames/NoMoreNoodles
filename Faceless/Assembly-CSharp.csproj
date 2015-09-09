@@ -50,6 +50,7 @@
      <Compile Include="Assets\_Script\2DLightAssets\StaticLight.cs" />
      <Compile Include="Assets\_Script\Avatar\Avatar_Behavior.cs" />
      <Compile Include="Assets\_Script\Avatar\Avatar_BehaviorV2.cs" />
+     <Compile Include="Assets\_Script\Avatar\burst.cs" />
      <Compile Include="Assets\_Script\Cam\Camera_Behavior.cs" />
      <Compile Include="Assets\_Script\Extension\Mathfx.cs" />
      <Compile Include="Assets\_Script\Extension\MyEnum.cs" />
@@ -57,6 +58,8 @@
      <Compile Include="Assets\_Script\Ingredients\NPC\NPC_Behavior.cs" />
      <Compile Include="Assets\_Script\Ingredients\Nodes.cs" />
      <Compile Include="Assets\_Script\Ingredients\PickUps.cs" />
+     <Compile Include="Assets\_Script\Ingredients\SliderDoor.cs" />
+     <Compile Include="Assets\_Script\Ingredients\WindMill.cs" />
      <Compile Include="Assets\_Script\Mechanic\GameManager.cs" />
      <Compile Include="Assets\_Script\Mechanic\Parallaxe.cs" />
      <Compile Include="Assets\_Script\Mechanic\RespawnManager.cs" />

@@ -26,6 +26,8 @@ GameObject:
   m_Component:
   - 4: {fileID: 477126}
   - 212: {fileID: 21242946}
+  - 60: {fileID: 6084742}
+  - 114: {fileID: 11442446}
   m_Layer: 0
   m_Name: arrow
   m_TagString: Untagged
@@ -79,7 +81,6 @@ GameObject:
   - 114: {fileID: 11499642}
   - 61: {fileID: 6102416}
   - 58: {fileID: 5821056}
-  - 58: {fileID: 5845902}
   m_Layer: 0
   m_Name: Avatar
   m_TagString: Player
@@ -177,22 +178,25 @@ CircleCollider2D:
   m_Material: {fileID: 6200000, guid: 5ea69b4ac34de8049a844f12188e46c1, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_Offset: {x: 0, y: -.460000008}
+  m_Offset: {x: 0, y: -.49000001}
   serializedVersion: 2
-  m_Radius: .109999999
---- !u!58 &5845902
-CircleCollider2D:
+  m_Radius: .101000004
+--- !u!60 &6084742
+PolygonCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 199672}
+  m_GameObject: {fileID: 113490}
   m_Enabled: 1
-  m_Material: {fileID: 6200000, guid: 5ea69b4ac34de8049a844f12188e46c1, type: 2}
-  m_IsTrigger: 0
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_Offset: {x: 0, y: .600000024}
-  serializedVersion: 2
-  m_Radius: .109999999
+  m_Offset: {x: 0, y: 0}
+  m_Points:
+    m_Paths:
+    - - {x: -.988474846, y: 2.64227295}
+      - {x: .0263180733, y: -1.17831421}
+      - {x: .857000351, y: 2.64651489}
 --- !u!61 &6102416
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -234,6 +238,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73900ebea6b5bea4eb4005e017fcdcbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &11442446
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 113490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d95713c5bc579c40af7939988d529f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isTrick: 0
 --- !u!114 &11499642
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -258,6 +274,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   mySprite: {fileID: 106288}
+  myBurst: {fileID: 113490}
 --- !u!198 &19854858
 ParticleSystem:
   m_ObjectHideFlags: 1
