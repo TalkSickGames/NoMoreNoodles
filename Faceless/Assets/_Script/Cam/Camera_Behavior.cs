@@ -5,7 +5,7 @@ public class Camera_Behavior : MonoBehaviour {
 	
 
 	public Vector3 offset;
-	private Transform target;
+	public Transform target;
 	
 	public float xDamping = 1;
 	public float yDamping = 1;
@@ -20,7 +20,7 @@ public class Camera_Behavior : MonoBehaviour {
 	
 
 	void Start () {
-		target = GameManager.Instance.Avatar.gameObject.transform;
+		//target = GameManager.Instance.Avatar.gameObject.transform;
 	}
 	
 
@@ -44,9 +44,9 @@ public class Camera_Behavior : MonoBehaviour {
 		}
 	}
 
-	public void CameraShake(){
+	public void CameraShake(float force){
 		posOrigin = this.transform.position;
-		shakeForce = 0.3f;
+		shakeForce = force;
 	}
 
 }

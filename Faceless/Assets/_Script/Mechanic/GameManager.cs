@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour {
 		} else if(Instance != this) {
 			Destroy(this.gameObject);
 		}
-		DontDestroyOnLoad (this.gameObject);
+		//DontDestroyOnLoad (this.gameObject);
 		ListMySpawns = GameObject.FindGameObjectsWithTag("SpawnPoint");
 		foreach (GameObject sp in ListMySpawns) {
 			mySpawns.Add (sp.gameObject.GetComponent<SpawnPoint>().id,sp.gameObject.GetComponent<SpawnPoint>());
@@ -31,9 +31,11 @@ public class GameManager : MonoBehaviour {
 
 
 		mainCamera = Camera.main.gameObject;
+
 		avatar = Instantiate (myAvatar, mySpawns [idToSpawnTo].transform.position, Quaternion.identity) as GameObject;
 		avatarB = avatar.GetComponent<Avatar_BehaviorV2>();
 		avatarB.HP = 6;
+		mainCamera.GetComponent<Camera_Behavior>().target = avatar.transform;
 	}
 
 	void Start(){

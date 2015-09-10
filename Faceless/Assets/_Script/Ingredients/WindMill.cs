@@ -28,7 +28,7 @@ public class WindMill : MonoBehaviour {
 
 
 		forceToRot = Mathf.Clamp(forceToRot,max*-1f,max);
-		myPalm.transform.Rotate(0f,0f,forceToRot);
+		myPalm.transform.Rotate(0f,0f,forceToRot*Time.deltaTime*20f);
 	}
 	void OnTriggerEnter2D(Collider2D other) {
 		if(other.GetComponent<burst>() != null){

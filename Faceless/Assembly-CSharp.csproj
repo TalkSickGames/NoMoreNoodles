@@ -55,6 +55,7 @@
      <Compile Include="Assets\_Script\Extension\Mathfx.cs" />
      <Compile Include="Assets\_Script\Extension\MyEnum.cs" />
      <Compile Include="Assets\_Script\Extension\Randomx.cs" />
+     <Compile Include="Assets\_Script\Ingredients\DamageBlock.cs" />
      <Compile Include="Assets\_Script\Ingredients\NPC\NPC_Behavior.cs" />
      <Compile Include="Assets\_Script\Ingredients\Nodes.cs" />
      <Compile Include="Assets\_Script\Ingredients\PickUps.cs" />

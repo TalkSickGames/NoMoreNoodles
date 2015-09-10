@@ -39,6 +39,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	
 	
 	//State! :D
+	private bool isVulnerable = true;
 	private bool isLedge;
 	private bool isJumping;
 	private bool isFalling;
@@ -55,9 +56,11 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	public LayerMask groundLayer;
 	private Vector2 movement;
 	private Vector2 steamVelocity;
+	private Vector2 effectVelocity;
 	private float timeCharge;
 	private bool isOnLeftLedge;
 	private bool desactivateNextFrame;
+
 
 	
 	//reference
@@ -107,9 +110,10 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 
 		
 		if(!isGrounded && CheckIsGround() && !isInWater){
-			if(movement.y <= -24f){
-				hp -= 1;
-				//Debug.Log(movement.y.ToString());
+			//Debug.Log(movement.y.ToString());
+			if(movement.y <= -22f){
+				TakeDamage(1);
+
 			}
 		}
 		movement = myRigid.velocity;
@@ -196,6 +200,8 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		Time.timeScale = 1f/slowTimeFactor;
 
 
+
+
 		if(isInWater){
 			if (CheckIsUsingRightJoystick()){
 
@@ -272,7 +278,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 
 		
 		
-		
+
 		
 		
 		
@@ -288,22 +294,20 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 			myCircle.transform.localScale = Vector3.Lerp (myCircle.transform.localScale, new Vector3 (slowTimeTime * 1f, slowTimeTime * 1f, 1f),2f* Time.deltaTime * (1f / Time.timeScale));
 			
 		}
-		
-		
-		if (!Mathfx.Approx(new Vector3(steamVelocity.x,steamVelocity.y,0f),Vector3.zero,0.1f)) {
-			steamVelocity = Vector2.Lerp(steamVelocity,Vector2.zero,4f*Time.deltaTime);
-		}else{
-			steamVelocity = Vector2.zero;
-		}
+
+
+
+
+
 		//Debug.Log (steamVelocity);
 		if ((Input.GetButtonDown("Fire1") && isGrounded) || (isInWater && Input.GetButtonDown("Fire1")) || (isLedge && Input.GetButtonDown("Fire1"))) {
 			isSlowed = false;
 			Jump ();
 			if(isLedge){
 				if(isOnLeftLedge){
-					steamVelocity.x = 5f;
+					effectVelocity.x = 5f;
 				}else{
-					steamVelocity.x = -5f;
+					effectVelocity.x = -5f;
 				}
 			}
 			isLedge = false;
@@ -345,11 +349,34 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		myAnimator.SetBool ("isGrounded", isGrounded);
 		myAnimator.SetBool ("isLedge", isLedge);
 		//movement = new Vector2 (Mathf.Clamp (movement.x, -15f, 15f), Mathf.Clamp (movement.y, -20f,20f));
+
+
+		if (!Mathfx.Approx(new Vector3(steamVelocity.x,steamVelocity.y,0f),Vector3.zero,0.1f)) {
+			if(Mathf.Sign(steamVelocity.x)!=Mathf.Sign(movement.x)){
+				steamVelocity.x = Mathf.Lerp(steamVelocity.x,0f,3f*Time.deltaTime);
+			}
+			steamVelocity = Vector2.Lerp(steamVelocity,Vector2.zero,4f*Time.deltaTime);
+			
+		}else{
+			steamVelocity = Vector2.zero;
+		}
 		
-		
-		myRigid.velocity = movement + steamVelocity;
-		
-		
+		if (!Mathfx.Approx(new Vector3(effectVelocity.x,effectVelocity.y,0f),Vector3.zero,0.1f)) {
+			if(Mathf.Sign(effectVelocity.x)!=Mathf.Sign(movement.x)){
+				effectVelocity.x = Mathf.Lerp(effectVelocity.x,0f,3f*Time.deltaTime);
+			}
+			effectVelocity = Vector2.Lerp(effectVelocity,Vector2.zero,4f*Time.deltaTime);
+			
+		}else{
+			effectVelocity = Vector2.zero;
+		}
+
+
+		myRigid.velocity = movement + steamVelocity + effectVelocity;
+		effectVelocity.y = 0f;
+//		if(hp <= 0){
+//			Application.LoadLevel(0);
+//		}
 		
 	}
 	
@@ -387,7 +414,40 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	public void Jump(){
 		movement = new Vector2 (movement.x, ((isInWater)? jumpForce/2f:jumpForce));
 	}
-	
+
+	public void KnockBack(float force, Vector3 pos){
+		movement = Vector2.zero;
+		effectVelocity = (this.transform.position - pos).normalized * force;
+		effectVelocity.x *=2f;
+	}
+
+	public void TakeDamage(int dmg,float force, Vector3 pos){
+		if(isVulnerable){
+			hp -= dmg;
+			KnockBack(force,pos);
+			GameManager.Instance.MainCamera.GetComponent<Camera_Behavior>().CameraShake((float)dmg/10f);
+			isVulnerable = false;
+			Invoke("BecomeVulnerable",0.5f);
+			if(hp <= 0){
+				Application.LoadLevel(0);
+			}
+		}
+	}
+	public void TakeDamage(int dmg){
+		if(isVulnerable){
+			hp -= dmg;
+			isVulnerable = false;
+			GameManager.Instance.MainCamera.GetComponent<Camera_Behavior>().CameraShake((float)dmg/10f);
+			Invoke("BecomeVulnerable",0.5f);
+			if(hp <= 0){
+				Application.LoadLevel(0);
+			}
+		}
+	}
+
+	public void BecomeVulnerable(){
+		isVulnerable = true;
+	}
 
 	public bool IsInWater{
 		get {return isInWater;}
