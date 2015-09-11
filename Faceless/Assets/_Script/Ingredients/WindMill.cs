@@ -6,9 +6,10 @@ public class WindMill : MonoBehaviour {
 	public float resistance;
 
 	public GameObject myPalm;
-	public float forceToRot;
+	private float forceToRot;
 
 	public float max = 20f;
+	public bool inverse;
 	// Use this for initialization
 	void Start () {
 
@@ -108,6 +109,13 @@ public class WindMill : MonoBehaviour {
 		Debug.Log(direction);
 		forceToRot += baseForce * direction;
 		
+
+	}
+
+	public float Force{
+		get{
+			return forceToRot*((inverse)?-1f:1);
+		}
 
 	}
 }

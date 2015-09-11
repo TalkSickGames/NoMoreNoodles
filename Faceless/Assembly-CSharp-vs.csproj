@@ -70,6 +70,7 @@
      <Compile Include="Assets\_Script\Mechanic\Waypoints.cs" />
      <Compile Include="Assets\_Script\Mechanic\particle_killTime.cs" />
      <Compile Include="Assets\_Script\UI\Canvas_UI.cs" />
+     <Compile Include="Assets\movableSwitch.cs" />
      <None Include="Assets\Standard Assets\Effects\GlassRefraction\Shaders\GlassStainedBumpDistort.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_BloomAndFlares\BlendOneOne.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\NoiseEffectShaderRGB.shader" />

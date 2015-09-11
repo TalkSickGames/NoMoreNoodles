@@ -4,6 +4,7 @@ using System.Collections;
 public class Avatar_BehaviorV2 : MonoBehaviour {
 	
 	//movement
+	public Vector2 totalMovement;
 	public float moveSpeed;
 	public float jumpForce;
 	public float gravity;
@@ -60,7 +61,9 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	private float timeCharge;
 	private bool isOnLeftLedge;
 	private bool desactivateNextFrame;
-
+	private Vector2 checkVelocity;
+	private Vector3 moveCheck;
+	private GameObject moveCheckObj;
 
 	
 	//reference
@@ -74,8 +77,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		myRigid = GetComponent<Rigidbody2D> ();
 		myBox = GetComponent<BoxCollider2D> ();
 		myAnimator = GetComponentInChildren<Animator> ();
-		
-		
+
 	}
 	
 	void Update () {
@@ -145,8 +147,9 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 				}
 			}
 		}
+		isLedge = false;
 		if(movement.y <=0f && !Physics2D.Raycast(this.transform.position,Vector2.down,1.2f,groundLayer)){
-
+			//isLedge = false;
 			if(Physics2D.Raycast(this.transform.position+(Vector3.left*0.25f)+(Vector3.up*1f),Vector2.down,0.5f,groundLayer)){
 				Vector2 tempPoint = Physics2D.Raycast(this.transform.position+(Vector3.left*0.25f)+(Vector3.up*1f),Vector2.down,0.5f,groundLayer).point;
 				if(!Physics2D.Raycast(tempPoint+(Vector2.up*0.1f),Vector2.left,0.5f,groundLayer) && Input.GetAxisRaw ("Horizontal")<-0.2f){
@@ -154,10 +157,13 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 					isLedge = true;
 					isOnLeftLedge = true;
 					movement = Vector2.zero;
+					if(Physics2D.Raycast(this.transform.position+(Vector3.left*0.25f)+(Vector3.up*1f),Vector2.down,0.5f,groundLayer).collider.gameObject.GetComponent<movableSwitch>()!=null){
+						Physics2D.Raycast(this.transform.position+(Vector3.left*0.25f)+(Vector3.up*1f),Vector2.down,0.5f,groundLayer).collider.gameObject.GetComponent<movableSwitch>().avatarIsOn = true;
+					}
 				}
-
+				
 			}
-
+			
 			if(Physics2D.Raycast(this.transform.position+(Vector3.right*0.25f)+(Vector3.up*1f),Vector2.down,0.5f,groundLayer)){
 				Vector2 tempPoint = Physics2D.Raycast(this.transform.position+(Vector3.right*0.25f)+(Vector3.up*1f),Vector2.down,0.5f,groundLayer).point;
 				if(!Physics2D.Raycast(tempPoint+(Vector2.up*0.1f),Vector2.right,0.5f,groundLayer) && Input.GetAxisRaw ("Horizontal")>0.2f){
@@ -165,15 +171,12 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 					isLedge = true;
 					isOnLeftLedge = false;
 					movement = Vector2.zero;
+					if(Physics2D.Raycast(this.transform.position+(Vector3.right*0.25f)+(Vector3.up*1f),Vector2.down,0.5f,groundLayer).collider.gameObject.GetComponent<movableSwitch>()!=null){
+						Physics2D.Raycast(this.transform.position+(Vector3.right*0.25f)+(Vector3.up*1f),Vector2.down,0.5f,groundLayer).collider.gameObject.GetComponent<movableSwitch>().avatarIsOn = true;
+					}
 				}
 				
 			}
-//			if(Physics2D.Raycast(this.transform.position+(Vector3.up*0.75f),Vector2.right,0.5f,groundLayer)&& !Physics2D.Raycast(this.transform.position+(Vector3.up*1.2f),Vector2.right,0.5f,groundLayer) && Input.GetAxisRaw ("Horizontal")>0.2f){
-//				isLedge = true;
-//				isOnLeftLedge = false;
-//				movement = Vector2.zero;
-//				
-//			}
 		}
 	
 		///Action
@@ -345,7 +348,9 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 			moveSpeedRamp = Mathf.Lerp(moveSpeedRamp, Input.GetAxisRaw ("Horizontal"), 5f * Time.deltaTime);
 			
 		}
+
 		movement = new Vector2 (Input.GetAxisRaw ("Horizontal") * ((isInWater)? moveSpeed/2f:moveSpeed) * Mathf.Abs( moveSpeedRamp), movement.y);
+
 
 		Quaternion tempV30 = Quaternion.Euler( new Vector3 (0f, 0f, 0f));
 		Quaternion tempV38 = Quaternion.Euler( new Vector3 (0f, 180f, 0f));
@@ -386,8 +391,28 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 			effectVelocity = Vector2.zero;
 		}
 
-
-		myRigid.velocity = movement + steamVelocity + effectVelocity;
+		if(isGrounded && Physics2D.Raycast(this.transform.position,Vector2.down,2f,groundLayer)){
+			if(Physics2D.Raycast(this.transform.position,Vector2.down,2f,groundLayer).collider.gameObject.GetComponent<movableSwitch>()!=null){
+				Physics2D.Raycast(this.transform.position,Vector2.down,2f,groundLayer).collider.gameObject.GetComponent<movableSwitch>().avatarIsOn = true;
+			}
+			if(moveCheckObj != Physics2D.Raycast(this.transform.position,Vector2.down,2f,groundLayer).collider.gameObject){
+				moveCheck = Physics2D.Raycast(this.transform.position,Vector2.down,2f,groundLayer).collider.transform.position;	
+				moveCheckObj = Physics2D.Raycast(this.transform.position,Vector2.down,2f,groundLayer).collider.gameObject;
+				checkVelocity = Vector2.zero;
+			}
+			if(moveCheck != Physics2D.Raycast(this.transform.position,Vector2.down,2f,groundLayer).collider.transform.position){
+				checkVelocity = Physics2D.Raycast(this.transform.position,Vector2.down,2f,groundLayer).collider.transform.position-moveCheck;
+				moveCheck = Physics2D.Raycast(this.transform.position,Vector2.down,2f,groundLayer).collider.transform.position;
+			}else{
+				checkVelocity = Vector2.zero;
+			}
+		}else{
+			checkVelocity = Vector2.zero;
+			moveCheckObj = null;
+		}
+		checkVelocity.y = 0f;
+		myRigid.velocity = movement + steamVelocity + effectVelocity + (checkVelocity*60f);
+		totalMovement = movement + steamVelocity + effectVelocity;
 		effectVelocity.y = 0f;
 //		if(hp <= 0){
 //			Application.LoadLevel(0);
@@ -467,6 +492,11 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	public bool IsInWater{
 		get {return isInWater;}
 		set{isInWater = value;}
+	}
+
+	public bool IsGrounded{
+		get {return isGrounded;}
+		set{isGrounded = value;}
 	}
 
 	public bool Applied{
