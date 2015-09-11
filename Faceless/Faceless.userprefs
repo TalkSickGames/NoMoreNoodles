@@ -1,8 +1,15 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace />
-  <MonoDevelop.Ide.Workbench ActiveDocument="..\..\Desktop\Bureauvide1\Travaux\Shattered\Shattered\Assets\Xavier\AvatarController.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\_Script\Avatar\Avatar_BehaviorV2.cs">
     <Files>
-      <File FileName="..\..\Desktop\Bureauvide1\Travaux\Shattered\Shattered\Assets\Xavier\AvatarController.cs" Line="38" Column="12" />
+      <File FileName="Assets\_Script\Avatar\Avatar_BehaviorV2.cs" Line="378" Column="8" />
+      <File FileName="Assets\_Script\Ingredients\WindMill.cs" Line="1" Column="1" />
+      <File FileName="Assets\_Script\Ingredients\SliderDoor.cs" Line="1" Column="1" />
+      <File FileName="Assets\movableSwitch.cs" Line="1" Column="1" />
+      <File FileName="Assets\_Script\UI\Canvas_UI.cs" Line="1" Column="1" />
+      <File FileName="Assets\_Script\Mechanic\GameManager.cs" Line="1" Column="1" />
+      <File FileName="Assets\_Script\Extension\MyEnum.cs" Line="1" Column="1" />
+      <File FileName="Assets\_Script\Ingredients\PickUps.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
