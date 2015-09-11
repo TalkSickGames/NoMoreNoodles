@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Foo;
 
 public class Avatar_BehaviorV2 : MonoBehaviour {
 	
@@ -52,7 +53,11 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	private bool isInWater;
 //	private bool isAffected;
 	private bool isGravityed;
-
+	private Mask myMask;
+//	private bool isMaskWraith;
+//	private bool isMaskFire;
+//	private bool isMaskChronos;
+//	private bool isMaskBender;
 	//Utility
 	public LayerMask groundLayer;
 	private Vector2 movement;
@@ -64,6 +69,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	private Vector2 checkVelocity;
 	private Vector3 moveCheck;
 	private GameObject moveCheckObj;
+	private float lastFallV;
 
 	
 	//reference
@@ -72,6 +78,9 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	private Animator myAnimator;
 	public GameObject mySprite;
 	public GameObject myBurst;
+	public PhysicsMaterial2D slip;
+	public PhysicsMaterial2D noSlip;
+
 
 	void Start(){
 		myRigid = GetComponent<Rigidbody2D> ();
@@ -81,6 +90,39 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	}
 	
 	void Update () {
+	
+		if(Input.GetAxis("DpadV") > 0.8f){
+			myMask = Mask.Wraith;
+		}
+		if(Input.GetAxis("DpadH") > 0.8f){
+			myMask = Mask.Fire;
+		}
+		if(Input.GetAxis("DpadV") < -0.8f){
+			myMask = Mask.Chronos;
+		}
+		if(Input.GetAxis("DpadH") < -0.8f){
+			myMask = Mask.Bender;
+		}
+		if(myMask == Mask.Fire){
+			if (powerAmmo > 2){
+				powerAmmo = 2;
+			}
+		}else{
+			if (powerAmmo > 1){
+				powerAmmo = 1;
+			}
+		}
+
+		if(myMask == Mask.Chronos){
+			if (timeAmmo > 4){
+				timeAmmo = 4;
+			}
+		}else{
+			if (timeAmmo > 3){
+				timeAmmo = 3;
+			}
+		}
+
 		if(desactivateNextFrame){
 			myBurst.GetComponent<PolygonCollider2D>().enabled = false;
 			desactivateNextFrame = false;
@@ -112,25 +154,38 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 
 		
 		if(!isGrounded && CheckIsGround() && !isInWater){
-			//Debug.Log(movement.y.ToString());
-			if(movement.y <= -22f){
+			//Debug.Log(movement.y+" "+lastFallV);
+			if((lastFallV  <= -22f || movement.y <= -22f) && myMask != Mask.Wraith){
 				TakeDamage(1);
 
 			}
 		}
+		if(this.GetComponent<CircleCollider2D>().sharedMaterial != noSlip && Physics2D.Raycast(this.transform.position,Vector2.down,0.65f,groundLayer)){
+			Debug.Log("deslip");
+			DeSlipCollider();
+		}
+		if(this.GetComponent<CircleCollider2D>().sharedMaterial == noSlip && !Physics2D.Raycast(this.transform.position,Vector2.down,0.65f,groundLayer)){
+			Debug.Log("slip");
+			SlipCollider();
+		}
+
 		movement = myRigid.velocity;
 		isGrounded = CheckIsGround();
+
 		if(Mathfx.Approx(steamVelocity.x,0f,3f)/* && Mathfx.Approx(steamVelocity.y,0f,3f)*/){
 
 			isGravityed = true;
 		}
 
-
+	
 		if(isGrounded){
+
 			moveSpeed = 6f;
 		}else{
+
 			moveSpeed = 5f;
 		}
+	
 
 		///Lerp movement and Gravity
 		if(!isLedge){
@@ -281,7 +336,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 					}
 					
 					movement.y = steamVelocity.y;
-
+				
 					if(Mathfx.Approx(steamVelocity.y,0f,1f)){
 						isGravityed = false;
 					}
@@ -414,10 +469,37 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		myRigid.velocity = movement + steamVelocity + effectVelocity + (checkVelocity*60f);
 		totalMovement = movement + steamVelocity + effectVelocity;
 		effectVelocity.y = 0f;
-//		if(hp <= 0){
-//			Application.LoadLevel(0);
-//		}
-		
+
+		if(lastFallV > myRigid.velocity.y){
+			lastFallV = myRigid.velocity.y;
+		}
+		if(myRigid.velocity.y>=0f){
+			lastFallV = 0f;
+		}
+
+	}
+	//////////////////////////////////////////////////////////////////
+	void FixedUpdate(){
+
+		if(isGrounded && Physics2D.Raycast(this.transform.position,Vector2.down,2f,groundLayer)){
+			if(Physics2D.Raycast(this.transform.position,Vector2.down,2f,groundLayer).collider.gameObject.GetComponent<movableSwitch>()!=null){
+				Physics2D.Raycast(this.transform.position,Vector2.down,2f,groundLayer).collider.gameObject.GetComponent<movableSwitch>().avatarIsOn = true;
+			}
+		}
+
+		if(movement.y <=0f && !Physics2D.Raycast(this.transform.position,Vector2.down,1.2f,groundLayer)){
+			if(Physics2D.Raycast(this.transform.position+(Vector3.left*0.25f)+(Vector3.up*1f),Vector2.down,0.5f,groundLayer)){
+				if(Physics2D.Raycast(this.transform.position+(Vector3.left*0.25f)+(Vector3.up*1f),Vector2.down,0.5f,groundLayer).collider.gameObject.GetComponent<movableSwitch>()!=null){
+					Physics2D.Raycast(this.transform.position+(Vector3.left*0.25f)+(Vector3.up*1f),Vector2.down,0.5f,groundLayer).collider.gameObject.GetComponent<movableSwitch>().avatarIsOn = true;
+				}
+			}
+			if(Physics2D.Raycast(this.transform.position+(Vector3.right*0.25f)+(Vector3.up*1f),Vector2.down,0.5f,groundLayer)){
+				if(Physics2D.Raycast(this.transform.position+(Vector3.right*0.25f)+(Vector3.up*1f),Vector2.down,0.5f,groundLayer).collider.gameObject.GetComponent<movableSwitch>()!=null){
+					Physics2D.Raycast(this.transform.position+(Vector3.right*0.25f)+(Vector3.up*1f),Vector2.down,0.5f,groundLayer).collider.gameObject.GetComponent<movableSwitch>().avatarIsOn = true;
+				}
+			}
+		}
+
 	}
 	
 	bool CheckIsGround(){
@@ -453,6 +535,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	
 	public void Jump(){
 		movement = new Vector2 (movement.x, ((isInWater)? jumpForce/2f:jumpForce));
+		SlipCollider();
 	}
 
 	public void KnockBack(float force, Vector3 pos){
@@ -485,6 +568,24 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		}
 	}
 
+	public void SlipCollider(){
+		this.GetComponent<CircleCollider2D>().sharedMaterial = slip;
+		this.GetComponent<BoxCollider2D>().sharedMaterial = slip;
+		this.GetComponent<CircleCollider2D>().enabled = false;
+		this.GetComponent<CircleCollider2D>().enabled = true;
+		this.GetComponent<BoxCollider2D>().enabled = false;
+		this.GetComponent<BoxCollider2D>().enabled = true;
+	}
+
+	public void DeSlipCollider(){
+		this.GetComponent<CircleCollider2D>().sharedMaterial = noSlip;
+		this.GetComponent<BoxCollider2D>().sharedMaterial = noSlip;
+		this.GetComponent<CircleCollider2D>().enabled = false;
+		this.GetComponent<CircleCollider2D>().enabled = true;
+		this.GetComponent<BoxCollider2D>().enabled = false;
+		this.GetComponent<BoxCollider2D>().enabled = true;
+	}
+
 	public void BecomeVulnerable(){
 		isVulnerable = true;
 	}
@@ -503,17 +604,13 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		get {return applied;}
 		set{applied = value;}
 	}
-
+	public Mask MyMask{
+		get{return myMask;}
+		set{myMask = value;}
+	}
 	public int PowerAmmo{
 		get{return powerAmmo;}
-		set{
-
-			powerAmmo = value;
-			if (powerAmmo > 1){
-				powerAmmo = 1;
-			}
-		
-		}
+		set{powerAmmo = value;}
 	}
 	
 	public int TrickAmmo{
@@ -523,12 +620,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 
 	public int TimeAmmo{
 		get{return timeAmmo;}
-		set{	
-			timeAmmo = value;
-			if (timeAmmo > 3){
-				timeAmmo = 3;
-			}
-		}
+		set{timeAmmo = value;}
 	}
 	
 	public int HP{

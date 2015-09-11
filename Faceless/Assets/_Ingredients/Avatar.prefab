@@ -289,6 +289,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0069225d510cb3e49a214c8d48e311bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  totalMovement: {x: 0, y: 0}
   moveSpeed: 6
   jumpForce: 11
   gravity: 25
@@ -303,6 +304,8 @@ MonoBehaviour:
     m_Bits: 256
   mySprite: {fileID: 106288}
   myBurst: {fileID: 113490}
+  slip: {fileID: 6200000, guid: 5ea69b4ac34de8049a844f12188e46c1, type: 2}
+  noSlip: {fileID: 6200000, guid: 575aafda3501eb341b094c026347b0fd, type: 2}
 --- !u!198 &19854858
 ParticleSystem:
   m_ObjectHideFlags: 1
@@ -1553,6 +1556,14 @@ Prefab:
       propertyPath: m_Mass
       value: .100000001
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: slip
+      value: 
+      objectReference: {fileID: 6200000, guid: 5ea69b4ac34de8049a844f12188e46c1, type: 2}
+    - target: {fileID: 0}
+      propertyPath: noSlip
+      value: 
+      objectReference: {fileID: 6200000, guid: 575aafda3501eb341b094c026347b0fd, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 199672}
