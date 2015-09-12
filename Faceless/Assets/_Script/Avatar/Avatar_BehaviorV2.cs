@@ -5,6 +5,7 @@ using Foo;
 public class Avatar_BehaviorV2 : MonoBehaviour {
 	
 	//movement
+	//public GameObject pp;
 	public Vector2 totalMovement;
 	public float moveSpeed;
 	public float jumpForce;
@@ -54,6 +55,8 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 //	private bool isAffected;
 	private bool isGravityed;
 	private Mask myMask;
+	private bool isInShot;
+
 //	private bool isMaskWraith;
 //	private bool isMaskFire;
 //	private bool isMaskChronos;
@@ -62,6 +65,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	public LayerMask groundLayer;
 	private Vector2 movement;
 	private Vector2 steamVelocity;
+	//private Vector2 tempSteamVelocity;
 	private Vector2 effectVelocity;
 	private float timeCharge;
 	private bool isOnLeftLedge;
@@ -70,6 +74,8 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	private Vector3 moveCheck;
 	private GameObject moveCheckObj;
 	private float lastFallV;
+	private float airC;
+	private Vector2 goingTo;
 
 	
 	//reference
@@ -90,7 +96,8 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	}
 	
 	void Update () {
-	
+
+		airC = Mathf.Lerp (airC, 1f, Time.deltaTime);
 		if(Input.GetAxis("DpadV") > 0.8f){
 			myMask = Mask.Wraith;
 		}
@@ -172,25 +179,30 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		movement = myRigid.velocity;
 		isGrounded = CheckIsGround();
 
-		if(Mathfx.Approx(steamVelocity.x,0f,3f)/* && Mathfx.Approx(steamVelocity.y,0f,3f)*/){
-
-			isGravityed = true;
-		}
-
+//		if(Mathfx.Approx(steamVelocity.x,0f,4f)/* && Mathfx.Approx(steamVelocity.y,0f,3f)*/){
+//			isGravityed = true;
+//		}
+//		if (isInShot) {
+//			airC = 0f;
+//		}
+//		if(Mathfx.Approx(steamVelocity.x,0f,1f) && movement.y <3f){
+//			isInShot = false;
+//
+//		}
 	
 		if(isGrounded){
 
-			moveSpeed = 6f;
+			//moveSpeed = 6f;
 		}else{
 
-			moveSpeed = 5f;
+			rechargeCooldown =0f;
 		}
 	
 
 		///Lerp movement and Gravity
 		if(!isLedge){
 			if(!isInWater){
-				if(movement.y > -25f && isGravityed){
+				if(movement.y > -25f && !isInShot){
 					movement = new Vector2 (movement.x, movement.y - gravity * Time.deltaTime);
 				}
 			}else{
@@ -203,7 +215,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 			}
 		}
 		isLedge = false;
-		if(movement.y <=0f && !Physics2D.Raycast(this.transform.position,Vector2.down,1.2f,groundLayer)){
+		if(movement.y <=0f && !Physics2D.Raycast(this.transform.position,Vector2.down,1.2f,groundLayer) && !isInShot){
 			//isLedge = false;
 			if(Physics2D.Raycast(this.transform.position+(Vector3.left*0.25f)+(Vector3.up*1f),Vector2.down,0.5f,groundLayer)){
 				Vector2 tempPoint = Physics2D.Raycast(this.transform.position+(Vector3.left*0.25f)+(Vector3.up*1f),Vector2.down,0.5f,groundLayer).point;
@@ -276,22 +288,24 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 
 
 		if(isInWater){
-			if (CheckIsUsingRightJoystick()){
-
-				SetArrow();
-				isSlowed = false;
-				applied = true;
-				steamVelocity = Vector2.Lerp(steamVelocity,( myArrow.transform.up * trickVelocity* -4f),2f*Time.deltaTime);
-				StartParticle();
-				CancelInvoke("StopParticle");
-				Invoke("StopParticle",0.15f);
-				movement.y = steamVelocity.y*4f;
-				isLedge = false;
-				//movement.y = Mathf.Lerp(movement.y, steamVelocity.y,10f*Time.deltaTime);
-				steamVelocity.y = 0f;
-				chargeCooldown = 0f;
-
-			}
+//			if (CheckIsUsingRightJoystick()){
+//
+//				SetArrow();
+//				isSlowed = false;
+//				applied = true;
+//				steamVelocity = Vector2.Lerp(steamVelocity,( myArrow.transform.up * trickVelocity* -4f),2f*Time.deltaTime);
+//
+//				StartParticle();
+//				CancelInvoke("StopParticle");
+//				Invoke("StopParticle",0.15f);
+//				movement.y = steamVelocity.y*4f;
+//				isLedge = false;
+//				//movement.y = Mathf.Lerp(movement.y, steamVelocity.y,10f*Time.deltaTime);
+//				//tempSteamVelocity = steamVelocity;
+//				steamVelocity.y = 0f;
+//				chargeCooldown = 0f;
+//
+//			}
 		}else{
 			if (CheckIsUsingRightJoystick()){
 				if(!isCharging){
@@ -305,7 +319,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 //				if(!isGrounded){
 //					isChargingFromAir = true;
 //				}
-				
+			
 			}else{
 				isCharging = false;
 				//isChargingFromAir = false;
@@ -315,8 +329,17 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 					isSlowed = false;
 					applied = true;
 					chargeCooldown = 0f;
-					if(chargeIsTrick && trickAmmo >=1){
-						steamVelocity = myArrow.transform.up * trickVelocity* -1f;
+					if(/*chargeIsTrick && */trickAmmo >=1){
+
+						if(!Physics2D.BoxCast(this.transform.position,myBox.size,0f,myArrow.transform.up*-1f,powerVelocity,groundLayer)){
+							Debug.Log("asd");
+							goingTo = this.transform.position +( myArrow.transform.up * powerVelocity*-1f);
+						}else{
+							Debug.Log("asassd");
+							goingTo = Physics2D.BoxCast(this.transform.position,myBox.size,0f,myArrow.transform.up*-1f,powerVelocity,groundLayer).centroid;
+							Debug.Log(goingTo);
+						}
+						//goingTo = this.transform.position +( myArrow.transform.up * powerVelocity*-1f);
 						StartParticle();
 						CancelInvoke("StopParticle");
 						Invoke("StopParticle",0.15f);
@@ -326,23 +349,25 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 						trickAmmo -=1;
 						myBurst.GetComponent<burst>().isTrick = true;
 					}
-					if(!chargeIsTrick && powerAmmo >=1){
-						steamVelocity = myArrow.transform.up * powerVelocity* -1f;
-						StartParticle();
-						CancelInvoke("StopParticle");
-						Invoke("StopParticle",0.5f);
-						powerAmmo -=1;
-						myBurst.GetComponent<burst>().isTrick = false;
-					}
+//					if(!chargeIsTrick && powerAmmo >=1){
+//						steamVelocity = myArrow.transform.up * powerVelocity*-1f;
+//						StartParticle();
+//						CancelInvoke("StopParticle");
+//						Invoke("StopParticle",0.5f);
+//						powerAmmo -=1;
+//						myBurst.GetComponent<burst>().isTrick = false;
+//					}
 					
-					movement.y = steamVelocity.y;
+					//movement.y = steamVelocity.y;
 				
-					if(Mathfx.Approx(steamVelocity.y,0f,1f)){
-						isGravityed = false;
-					}
+//					if(Mathfx.Approx(steamVelocity.y,0f,1f)){
+//						isGravityed = false;
+//					}
 					isLedge = false;
-					steamVelocity.y = 0f;
+				//	tempSteamVelocity = steamVelocity;
+					//steamVelocity.y = 0f;
 					timeCharge = 0f;
+					isInShot = true;
 					myBurst.GetComponent<PolygonCollider2D>().enabled = true;
 
 				}
@@ -435,7 +460,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		}else{
 			steamVelocity = Vector2.zero;
 		}
-		
+
 		if (!Mathfx.Approx(new Vector3(effectVelocity.x,effectVelocity.y,0f),Vector3.zero,0.1f)) {
 			if(Mathf.Sign(effectVelocity.x)!=Mathf.Sign(movement.x)){
 				effectVelocity.x = Mathf.Lerp(effectVelocity.x,0f,3f*Time.deltaTime);
@@ -466,7 +491,21 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 			moveCheckObj = null;
 		}
 		checkVelocity.y = 0f;
-		myRigid.velocity = movement + steamVelocity + effectVelocity + (checkVelocity*60f);
+		if (!Mathfx.Approx (this.transform.position, goingTo, 0.5f) && goingTo != default(Vector2)) {
+
+			this.transform.position = Vector3.Lerp (this.transform.position, goingTo, 5f * Time.deltaTime);
+		} else {
+			isInShot = false;
+		
+			goingTo = default(Vector2);
+		}
+
+		if (isInShot) {
+			myRigid.velocity = steamVelocity + effectVelocity + (checkVelocity * 60f);
+		} else {
+			myRigid.velocity = new Vector2(movement.x * airC,movement.y) + steamVelocity + effectVelocity + (checkVelocity*60f);
+		}
+
 		totalMovement = movement + steamVelocity + effectVelocity;
 		effectVelocity.y = 0f;
 
