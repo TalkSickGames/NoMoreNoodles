@@ -3,6 +3,19 @@ using System;
 
 public class Mathfx
 {
+
+	public static float IsDouxClamp(float value, float bet, float ween){
+		float min;
+		float max;
+		if(bet < ween){
+			min = bet;
+			max = ween;
+		}else{
+			min = ween;
+			max = bet;
+		}
+		return Mathf.Clamp(value,min,max);
+	}
 	public static float Hermite(float start, float end, float value)
 	{
 		return Mathf.Lerp(start, end, value * value * (3.0f - 2.0f * value));
