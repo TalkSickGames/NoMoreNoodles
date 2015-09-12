@@ -6,6 +6,8 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	
 	//movement
 	//public GameObject pp;
+	public float vitesseQueTuTePrendsAFaireDuPointAauPointB;
+	public float idleDeSaut;
 	public Vector2 totalMovement;
 	public float moveSpeed;
 	public float jumpForce;
@@ -491,9 +493,9 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 			moveCheckObj = null;
 		}
 		checkVelocity.y = 0f;
-		if (!Mathfx.Approx (this.transform.position, goingTo, 0.5f) && goingTo != default(Vector2)) {
+		if (!Mathfx.Approx (this.transform.position, goingTo, idleDeSaut) && goingTo != default(Vector2)) {
 
-			this.transform.position = Vector3.Lerp (this.transform.position, goingTo, 5f * Time.deltaTime);
+			this.transform.position = Vector3.Lerp (this.transform.position, goingTo, vitesseQueTuTePrendsAFaireDuPointAauPointB * Time.deltaTime);
 		} else {
 			isInShot = false;
 		
