@@ -97,7 +97,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	
 	void Update () {
 
-		airC = Mathf.Lerp (airC, 1f, Time.deltaTime);
+		airC = Mathf.Lerp (airC, 1f, 3f*Time.deltaTime);
 		if(Input.GetAxis("DpadV") > 0.8f){
 			myMask = Mask.Wraith;
 		}
@@ -182,9 +182,9 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 //		if(Mathfx.Approx(steamVelocity.x,0f,4f)/* && Mathfx.Approx(steamVelocity.y,0f,3f)*/){
 //			isGravityed = true;
 //		}
-//		if (isInShot) {
-//			airC = 0f;
-//		}
+		if (isInShot) {
+			airC = 0f;
+		}
 //		if(Mathfx.Approx(steamVelocity.x,0f,1f) && movement.y <3f){
 //			isInShot = false;
 //
