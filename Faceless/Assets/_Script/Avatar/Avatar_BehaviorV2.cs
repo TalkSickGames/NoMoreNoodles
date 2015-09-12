@@ -6,8 +6,8 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	
 	//movement
 	//public GameObject pp;
-	public float vitesseQueTuTePrendsAFaireDuPointAauPointB;
-	public float idleDeSaut;
+	public float vitesseQueTuTePrendsAFaireDuPointAauPointB = 4f;
+	public float idleDeSaut = 0.5f;
 	public Vector2 totalMovement;
 	public float moveSpeed;
 	public float jumpForce;
@@ -98,7 +98,11 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	}
 	
 	void Update () {
-
+		if (vitesseQueTuTePrendsAFaireDuPointAauPointB == 0f) {
+			vitesseQueTuTePrendsAFaireDuPointAauPointB = 4f;
+			idleDeSaut = 0.5f;
+		}
+	
 		airC = Mathf.Lerp (airC, 1f, 3f*Time.deltaTime);
 		if(Input.GetAxis("DpadV") > 0.8f){
 			myMask = Mask.Wraith;
@@ -142,7 +146,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 
 
 		chargeCooldown += 1f * Time.deltaTime * (1f / Time.timeScale);
-		rechargeCooldown += 1f * Time.deltaTime * (1f / Time.timeScale);
+		rechargeCooldown += 4f * Time.deltaTime * (1f / Time.timeScale);
 		
 		if (chargeCooldown >= 0.5f) {
 			chargeCooldown =0f;
@@ -194,9 +198,9 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	
 		if(isGrounded){
 
-			//moveSpeed = 6f;
+			moveSpeed = 8f;
 		}else{
-
+			moveSpeed = 7f;
 			rechargeCooldown =0f;
 		}
 	
