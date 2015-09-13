@@ -203,7 +203,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 
 			moveSpeed = 8f;
 		}else{
-			moveSpeed = 6f;
+			moveSpeed = 6.5f;
 			if(!isLedge){
 				rechargeCooldown =0f;
 			}
@@ -507,6 +507,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		if (!Mathfx.Approx (this.transform.position, goingTo, 0.1f) && goingTo != default(Vector2)) {
 
 			this.transform.position = Vector3.Lerp (this.transform.position, goingTo, vitesseQueTuTePrendsAFaireDuPointAauPointB * Time.deltaTime);
+			CancelInvoke("StopIdleJump");
 		} else {
 			if(!IsInvoking("StopJumpIdle") && goingTo != default(Vector2) && Mathfx.Approx (this.transform.position, goingTo, 0.1f)){
 				Invoke ("StopJumpIdle",idleDeSaut);
