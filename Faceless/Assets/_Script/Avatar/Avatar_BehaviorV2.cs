@@ -98,10 +98,10 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	}
 	
 	void Update () {
-		if (vitesseQueTuTePrendsAFaireDuPointAauPointB == 0f) {
-			vitesseQueTuTePrendsAFaireDuPointAauPointB = 4f;
-			idleDeSaut = 0.5f;
-		}
+//		if (vitesseQueTuTePrendsAFaireDuPointAauPointB == 0f) {
+//			vitesseQueTuTePrendsAFaireDuPointAauPointB = 4f;
+//			idleDeSaut = 0.5f;
+//		}
 	
 		airC = Mathf.Lerp (airC, 1f, 3f*Time.deltaTime);
 		if(Input.GetAxis("DpadV") > 0.8f){
@@ -168,6 +168,9 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		
 		if(!isGrounded && CheckIsGround() && !isInWater){
 			//Debug.Log(movement.y+" "+lastFallV);
+			if(trickAmmo == 0){
+				trickAmmo = 1;
+			}
 			if((lastFallV  <= -22f || movement.y <= -22f) && myMask != Mask.Wraith){
 				TakeDamage(1);
 
@@ -200,8 +203,10 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 
 			moveSpeed = 8f;
 		}else{
-			moveSpeed = 7f;
-			rechargeCooldown =0f;
+			moveSpeed = 6f;
+			if(!isLedge){
+				rechargeCooldown =0f;
+			}
 		}
 	
 
@@ -336,7 +341,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 					applied = true;
 					chargeCooldown = 0f;
 					if(/*chargeIsTrick && */trickAmmo >=1){
-
+						StopJumpIdle();
 						if(!Physics2D.BoxCast(this.transform.position,myBox.size,0f,myArrow.transform.up*-1f,powerVelocity,groundLayer)){
 							Debug.Log("asd");
 							goingTo = this.transform.position +( myArrow.transform.up * powerVelocity*-1f);
@@ -354,7 +359,14 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 						}
 						trickAmmo -=1;
 						myBurst.GetComponent<burst>().isTrick = true;
+						isLedge = false;
+						//	tempSteamVelocity = steamVelocity;
+						//steamVelocity.y = 0f;
+						timeCharge = 0f;
+						isInShot = true;
+						myBurst.GetComponent<PolygonCollider2D>().enabled = true;
 					}
+					timeCharge = 0f;
 //					if(!chargeIsTrick && powerAmmo >=1){
 //						steamVelocity = myArrow.transform.up * powerVelocity*-1f;
 //						StartParticle();
@@ -369,12 +381,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 //					if(Mathfx.Approx(steamVelocity.y,0f,1f)){
 //						isGravityed = false;
 //					}
-					isLedge = false;
-				//	tempSteamVelocity = steamVelocity;
-					//steamVelocity.y = 0f;
-					timeCharge = 0f;
-					isInShot = true;
-					myBurst.GetComponent<PolygonCollider2D>().enabled = true;
+
 
 				}
 			}
@@ -497,13 +504,13 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 			moveCheckObj = null;
 		}
 		checkVelocity.y = 0f;
-		if (!Mathfx.Approx (this.transform.position, goingTo, idleDeSaut) && goingTo != default(Vector2)) {
+		if (!Mathfx.Approx (this.transform.position, goingTo, 0.1f) && goingTo != default(Vector2)) {
 
 			this.transform.position = Vector3.Lerp (this.transform.position, goingTo, vitesseQueTuTePrendsAFaireDuPointAauPointB * Time.deltaTime);
 		} else {
-			isInShot = false;
-		
-			goingTo = default(Vector2);
+			if(!IsInvoking("StopJumpIdle") && goingTo != default(Vector2) && Mathfx.Approx (this.transform.position, goingTo, 0.1f)){
+				Invoke ("StopJumpIdle",idleDeSaut);
+			}
 		}
 
 		if (isInShot) {
@@ -553,6 +560,11 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		} else {
 			return false;
 		}
+	}
+
+	void StopJumpIdle(){
+		isInShot = false;
+		goingTo = default(Vector2);
 	}
 
 	bool CheckIsUsingRightJoystick(){
