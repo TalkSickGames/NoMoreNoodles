@@ -507,7 +507,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		if (!Mathfx.Approx (this.transform.position, goingTo, 0.1f) && goingTo != default(Vector2)) {
 
 			this.transform.position = Vector3.Lerp (this.transform.position, goingTo, vitesseQueTuTePrendsAFaireDuPointAauPointB * Time.deltaTime);
-			CancelInvoke("StopIdleJump"
+			CancelInvoke("StopIdleJump");
 		} else {
 			if(!IsInvoking("StopJumpIdle") && goingTo != default(Vector2) && Mathfx.Approx (this.transform.position, goingTo, 0.1f)){
 				Invoke ("StopJumpIdle",idleDeSaut);
