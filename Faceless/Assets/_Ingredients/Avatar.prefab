@@ -290,11 +290,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vitesseQueTuTePrendsAFaireDuPointAauPointB: 20
-  idleDeSaut: .100000001
+  idleDeSaut: .150000006
   totalMovement: {x: 0, y: 0}
   moveSpeed: 8
   jumpForce: 9.5
-  gravity: 22
+  gravity: 20
   myArrow: {fileID: 113490}
   myCircle: {fileID: 134732}
   myPart: {fileID: 179776}
@@ -1496,7 +1496,7 @@ Prefab:
       objectReference: {fileID: 6200000, guid: 5ea69b4ac34de8049a844f12188e46c1, type: 2}
     - target: {fileID: 0}
       propertyPath: gravity
-      value: 22
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: jumpForce
@@ -1572,7 +1572,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: idleDeSaut
-      value: .100000001
+      value: .150000006
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
