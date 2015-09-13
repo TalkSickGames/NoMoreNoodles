@@ -203,7 +203,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 
 			moveSpeed = 8f;
 		}else{
-			moveSpeed = 6f;
+			moveSpeed = 6.5f;
 			if(!isLedge){
 				rechargeCooldown =0f;
 			}
@@ -226,12 +226,16 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 			}
 		}
 		isLedge = false;
-		if(movement.y <=0f && !Physics2D.Raycast(this.transform.position,Vector2.down,1.2f,groundLayer) && !isInShot){
+		if(movement.y <=2f && !Physics2D.Raycast(this.transform.position,Vector2.down,1.2f,groundLayer) && !isInShot){
 			//isLedge = false;
-			if(Physics2D.Raycast(this.transform.position+(Vector3.left*0.25f)+(Vector3.up*1f),Vector2.down,0.5f,groundLayer)){
-				Vector2 tempPoint = Physics2D.Raycast(this.transform.position+(Vector3.left*0.25f)+(Vector3.up*1f),Vector2.down,0.5f,groundLayer).point;
+			if(Physics2D.Raycast(this.transform.position+(Vector3.left*0.25f)+(Vector3.up*1.5f),Vector2.down,1.5f,groundLayer)){
+				Vector2 tempPoint = Physics2D.Raycast(this.transform.position+(Vector3.left*0.25f)+(Vector3.up*1.5f),Vector2.down,1.5f,groundLayer).point;
 				if(!Physics2D.Raycast(tempPoint+(Vector2.up*0.1f),Vector2.left,0.5f,groundLayer) && Input.GetAxisRaw ("Horizontal")<-0.2f){
 					this.transform.position = tempPoint-(Vector2.up*0.8f)+(Vector2.right*0.25f);
+//			if(Physics2D.Raycast(this.transform.position+(Vector3.left*0.25f)+(Vector3.up*1f),Vector2.down,0.5f,groundLayer)){
+//				Vector2 tempPoint = Physics2D.Raycast(this.transform.position+(Vector3.left*0.25f)+(Vector3.up*1f),Vector2.down,0.5f,groundLayer).point;
+//				if(!Physics2D.Raycast(tempPoint+(Vector2.up*0.1f),Vector2.left,0.5f,groundLayer) && Input.GetAxisRaw ("Horizontal")<-0.2f){
+//					this.transform.position = tempPoint-(Vector2.up*0.8f)+(Vector2.right*0.25f);
 					isLedge = true;
 					isOnLeftLedge = true;
 					movement = Vector2.zero;
@@ -242,8 +246,8 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 				
 			}
 			
-			if(Physics2D.Raycast(this.transform.position+(Vector3.right*0.25f)+(Vector3.up*1f),Vector2.down,0.5f,groundLayer)){
-				Vector2 tempPoint = Physics2D.Raycast(this.transform.position+(Vector3.right*0.25f)+(Vector3.up*1f),Vector2.down,0.5f,groundLayer).point;
+			if(Physics2D.Raycast(this.transform.position+(Vector3.right*0.25f)+(Vector3.up*1.5f),Vector2.down,1.5f,groundLayer)){
+				Vector2 tempPoint = Physics2D.Raycast(this.transform.position+(Vector3.right*0.25f)+(Vector3.up*1.5f),Vector2.down,1.5f,groundLayer).point;
 				if(!Physics2D.Raycast(tempPoint+(Vector2.up*0.1f),Vector2.right,0.5f,groundLayer) && Input.GetAxisRaw ("Horizontal")>0.2f){
 					this.transform.position = tempPoint-(Vector2.up*0.8f)+(Vector2.left*0.25f);
 					isLedge = true;
@@ -507,6 +511,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		if (!Mathfx.Approx (this.transform.position, goingTo, 0.1f) && goingTo != default(Vector2)) {
 
 			this.transform.position = Vector3.Lerp (this.transform.position, goingTo, vitesseQueTuTePrendsAFaireDuPointAauPointB * Time.deltaTime);
+			CancelInvoke("StopIdleJump");
 		} else {
 			if(!IsInvoking("StopJumpIdle") && goingTo != default(Vector2) && Mathfx.Approx (this.transform.position, goingTo, 0.1f)){
 				Invoke ("StopJumpIdle",idleDeSaut);
