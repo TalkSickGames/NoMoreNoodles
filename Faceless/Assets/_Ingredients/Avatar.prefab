@@ -290,7 +290,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vitesseQueTuTePrendsAFaireDuPointAauPointB: 20
-  idleDeSaut: .150000006
+  idleDeSaut: .25
   totalMovement: {x: 0, y: 0}
   moveSpeed: 8
   jumpForce: 9.5
@@ -299,7 +299,7 @@ MonoBehaviour:
   myCircle: {fileID: 134732}
   myPart: {fileID: 179776}
   trickVelocity: 7.5999999
-  powerVelocity: 4
+  powerVelocity: 5
   hp: 0
   groundLayer:
     serializedVersion: 2
@@ -1540,7 +1540,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: powerVelocity
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: moveSpeed
@@ -1572,7 +1572,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: idleDeSaut
-      value: .150000006
+      value: .25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
