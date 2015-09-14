@@ -289,15 +289,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0069225d510cb3e49a214c8d48e311bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vitesseQueTuTePrendsAFaireDuPointAauPointB: 20
+  idleDeSaut: .150000006
   totalMovement: {x: 0, y: 0}
-  moveSpeed: 6
-  jumpForce: 11
-  gravity: 25
+  moveSpeed: 8
+  jumpForce: 9.5
+  gravity: 20
   myArrow: {fileID: 113490}
   myCircle: {fileID: 134732}
   myPart: {fileID: 179776}
   trickVelocity: 7.5999999
-  powerVelocity: 18
+  powerVelocity: 4
   hp: 0
   groundLayer:
     serializedVersion: 2
@@ -1494,11 +1496,11 @@ Prefab:
       objectReference: {fileID: 6200000, guid: 5ea69b4ac34de8049a844f12188e46c1, type: 2}
     - target: {fileID: 0}
       propertyPath: gravity
-      value: 25
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: jumpForce
-      value: 11
+      value: 9.5
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_Radius
@@ -1538,11 +1540,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: powerVelocity
-      value: 18
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: moveSpeed
-      value: 6
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: groundLayer.m_Bits
@@ -1564,6 +1566,14 @@ Prefab:
       propertyPath: noSlip
       value: 
       objectReference: {fileID: 6200000, guid: 575aafda3501eb341b094c026347b0fd, type: 2}
+    - target: {fileID: 0}
+      propertyPath: vitesseQueTuTePrendsAFaireDuPointAauPointB
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: idleDeSaut
+      value: .150000006
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 199672}
