@@ -6,7 +6,7 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Effect
+  m_Name: testDasha
   m_Shader: {fileID: 4800000, guid: 0df5e33fd004c494e8f406628bdd17b6, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 5
@@ -26,8 +26,8 @@ Material:
         first:
           name: _BumpMap
         second:
-          m_Texture: {fileID: 2800000, guid: e08c295755c0885479ad19f518286ff2, type: 3}
-          m_Scale: {x: .200000003, y: .200000003}
+          m_Texture: {fileID: 2800000, guid: 94d292b5a77cd1149b5f394325cacf21, type: 3}
+          m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
       data:
         first:
@@ -130,7 +130,7 @@ Material:
       data:
         first:
           name: _BumpAmt
-        second: 1167
+        second: 0
     m_Colors:
       data:
         first:

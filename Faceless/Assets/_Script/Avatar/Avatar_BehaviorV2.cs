@@ -88,6 +88,8 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 	public GameObject myBurst;
 	public PhysicsMaterial2D slip;
 	public PhysicsMaterial2D noSlip;
+	public GameObject spriteDash;
+	public GameObject[] dashEffect;
 
 
 	void Start(){
@@ -161,7 +163,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		if(powerAmmo == 0){
 			chargeIsTrick = true;
 		}
-		
+
 		myArrow.GetComponent<SpriteRenderer> ().enabled = false;
 		
 
@@ -176,28 +178,24 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 
 			}
 		}
+
 		if(this.GetComponent<CircleCollider2D>().sharedMaterial != noSlip && Physics2D.Raycast(this.transform.position,Vector2.down,0.65f,groundLayer)){
-			Debug.Log("deslip");
+			//Debug.Log("deslip");
 			DeSlipCollider();
 		}
 		if(this.GetComponent<CircleCollider2D>().sharedMaterial == noSlip && !Physics2D.Raycast(this.transform.position,Vector2.down,0.65f,groundLayer)){
-			Debug.Log("slip");
+			//Debug.Log("slip");
 			SlipCollider();
 		}
 
 		movement = myRigid.velocity;
 		isGrounded = CheckIsGround();
 
-//		if(Mathfx.Approx(steamVelocity.x,0f,4f)/* && Mathfx.Approx(steamVelocity.y,0f,3f)*/){
-//			isGravityed = true;
-//		}
+
 		if (isInShot) {
 			airC = 0f;
 		}
-//		if(Mathfx.Approx(steamVelocity.x,0f,1f) && movement.y <3f){
-//			isInShot = false;
-//
-//		}
+
 	
 		if(isGrounded){
 
@@ -225,6 +223,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 				}
 			}
 		}
+
 		isLedge = false;
 		if(movement.y <=2f && !Physics2D.Raycast(this.transform.position,Vector2.down,1.2f,groundLayer) && !isInShot){
 			//isLedge = false;
@@ -260,6 +259,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 				
 			}
 		}
+
 	
 		///Action
 		
@@ -288,7 +288,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 			canCostTimeAmmo = true;
 			
 		}
-		
+
 		if(Input.GetButtonDown("BumperL")){
 			if(powerAmmo >=1 && chargeIsTrick){
 				chargeIsTrick = false;
@@ -302,26 +302,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 
 
 
-		if(isInWater){
-//			if (CheckIsUsingRightJoystick()){
-//
-//				SetArrow();
-//				isSlowed = false;
-//				applied = true;
-//				steamVelocity = Vector2.Lerp(steamVelocity,( myArrow.transform.up * trickVelocity* -4f),2f*Time.deltaTime);
-//
-//				StartParticle();
-//				CancelInvoke("StopParticle");
-//				Invoke("StopParticle",0.15f);
-//				movement.y = steamVelocity.y*4f;
-//				isLedge = false;
-//				//movement.y = Mathf.Lerp(movement.y, steamVelocity.y,10f*Time.deltaTime);
-//				//tempSteamVelocity = steamVelocity;
-//				steamVelocity.y = 0f;
-//				chargeCooldown = 0f;
-//
-//			}
-		}else{
+		if(!isInWater){
 			if (CheckIsUsingRightJoystick()){
 				if(!isCharging){
 					timeCharge = 0f;
@@ -339,53 +320,56 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 				isCharging = false;
 				//isChargingFromAir = false;
 	
-				if(timeCharge > 0.25f && !applied) {
-					
+				if(timeCharge > 0.25f && !applied && trickAmmo >=1) {
+
 					isSlowed = false;
 					applied = true;
 					chargeCooldown = 0f;
-					if(/*chargeIsTrick && */trickAmmo >=1){
-						StopJumpIdle();
-						if(!Physics2D.BoxCast(this.transform.position,myBox.size,0f,myArrow.transform.up*-1f,powerVelocity,groundLayer)){
-							Debug.Log("asd");
-							goingTo = this.transform.position +( myArrow.transform.up * powerVelocity*-1f);
-						}else{
-							Debug.Log("asassd");
-							goingTo = Physics2D.BoxCast(this.transform.position,myBox.size,0f,myArrow.transform.up*-1f,powerVelocity,groundLayer).centroid;
-							Debug.Log(goingTo);
-						}
-						//goingTo = this.transform.position +( myArrow.transform.up * powerVelocity*-1f);
-						StartParticle();
-						CancelInvoke("StopParticle");
-						Invoke("StopParticle",0.15f);
-						if(trickAmmo == 4){
-							rechargeCooldown = 0f;
-						}
-						trickAmmo -=1;
-						myBurst.GetComponent<burst>().isTrick = true;
-						isLedge = false;
-						//	tempSteamVelocity = steamVelocity;
-						//steamVelocity.y = 0f;
-						timeCharge = 0f;
-						isInShot = true;
-						myBurst.GetComponent<PolygonCollider2D>().enabled = true;
-					}
-					timeCharge = 0f;
-//					if(!chargeIsTrick && powerAmmo >=1){
-//						steamVelocity = myArrow.transform.up * powerVelocity*-1f;
-//						StartParticle();
-//						CancelInvoke("StopParticle");
-//						Invoke("StopParticle",0.5f);
-//						powerAmmo -=1;
-//						myBurst.GetComponent<burst>().isTrick = false;
-//					}
-					
-					//movement.y = steamVelocity.y;
-				
-//					if(Mathfx.Approx(steamVelocity.y,0f,1f)){
-//						isGravityed = false;
-//					}
 
+					StopJumpIdle();
+					if(!Physics2D.BoxCast(this.transform.position,myBox.size,0f,myArrow.transform.up*-1f,powerVelocity,groundLayer)){
+			
+						goingTo = this.transform.position +( myArrow.transform.up * powerVelocity*-1f);
+					}else{
+				
+						goingTo = Physics2D.BoxCast(this.transform.position,myBox.size,0f,myArrow.transform.up*-1f,powerVelocity,groundLayer).centroid;
+						//Debug.Log(goingTo);
+					}
+					Vector3 tempGoingTo = new Vector3(goingTo.x,goingTo.y,0f);
+					if(goingTo.x == this.transform.position.x && goingTo.y != this.transform.position.y){
+						GameObject tempDash = Instantiate(dashEffect[1],             new Vector3( this.transform.position.x,        this.transform.position.y+((tempGoingTo - this.transform.position).y/2f    )        ,0f)                ,Quaternion.identity) as GameObject;
+						tempDash.transform.localScale = new Vector3( 2f,Vector3.Distance(this.transform.position,tempGoingTo)-0.5f,1f);
+						tempDash.GetComponent<dashEffect>().isH = false;
+						//Debug.Log(Vector3.Distance(this.transform.position,tempGoingTo)%1f);
+						for(int i = 0; i< (int)Vector3.Distance(this.transform.position,tempGoingTo);i++){
+							GameObject tempSprite = Instantiate(spriteDash,new Vector3( this.transform.position.x,this.transform.position.y+ 1f * (float)(i)*Mathf.Sign((tempGoingTo - this.transform.position).y),0f),mySprite.transform.rotation) as GameObject;
+							tempSprite.GetComponent<SpriteRenderer>().material.color = new Color(tempSprite.GetComponent<SpriteRenderer>().material.color.r,tempSprite.GetComponent<SpriteRenderer>().material.color.g,tempSprite.GetComponent<SpriteRenderer>().material.color.b,0.2f+(i*0.2f));
+
+						}
+					}else{
+						GameObject tempDash = Instantiate(dashEffect[0],             new Vector3(         this.transform.position.x+((tempGoingTo - this.transform.position).x/2f    )        ,this.transform.position.y,0f)                ,Quaternion.identity) as GameObject;
+						tempDash.transform.localScale = new Vector3( Vector3.Distance(this.transform.position,tempGoingTo)-0.5f,4f,1f);
+						tempDash.GetComponent<dashEffect>().isH = true;
+						for(int i = 0; i< (int)Vector3.Distance(this.transform.position,tempGoingTo);i++){
+							GameObject tempSprite = Instantiate(spriteDash,new Vector3( this.transform.position.x+ 1f * (float)(i)*Mathf.Sign((tempGoingTo - this.transform.position).x),this.transform.position.y,0f),mySprite.transform.rotation) as GameObject;
+							tempSprite.GetComponent<SpriteRenderer>().material.color = new Color(tempSprite.GetComponent<SpriteRenderer>().material.color.r,tempSprite.GetComponent<SpriteRenderer>().material.color.g,tempSprite.GetComponent<SpriteRenderer>().material.color.b,0.2f+(i*0.2f));
+						}
+					}
+					//goingTo = this.transform.position +( myArrow.transform.up * powerVelocity*-1f);
+					StartParticle();
+					CancelInvoke("StopParticle");
+					Invoke("StopParticle",0.15f);
+					if(trickAmmo == 4){
+						rechargeCooldown = 0f;
+					}
+					trickAmmo -=1;
+					myBurst.GetComponent<burst>().isTrick = true;
+					isLedge = false;
+					//	tempSteamVelocity = steamVelocity;
+					//steamVelocity.y = 0f;
+					timeCharge = 0f;
+					isInShot = true;
+					myBurst.GetComponent<PolygonCollider2D>().enabled = true;
 
 				}
 			}
@@ -394,7 +378,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		
 		
 
-		
+
 		
 		
 		
@@ -402,6 +386,7 @@ public class Avatar_BehaviorV2 : MonoBehaviour {
 		
 		if (slowTimeTime == 2) {
 			myCircle.SetActive (false);
+
 			myCircle.transform.localScale = new Vector3 (1f, 1f, 1f);
 			//myCircle.transform.localScale = Vector3.Lerp (myCircle.transform.localScale, new Vector3 (slowTimeTime * 2f, slowTimeTime * 2f, 1f), Time.deltaTime * (1f / Time.timeScale));
 		} else {
