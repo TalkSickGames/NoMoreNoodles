@@ -5,7 +5,7 @@ AnimationClip:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Avatar_Firstshot_idle_
+  m_Name: Avatar_Jump
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -18,14 +18,12 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: 21300002, guid: b7f481ede18adcc40ab0b07ae2434309, type: 3}
-    - time: .0833333358
-      value: {fileID: 21300004, guid: b7f481ede18adcc40ab0b07ae2434309, type: 3}
+      value: {fileID: 21300012, guid: 04114991a3c9bf94595e49a38ebfa45e, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
     script: {fileID: 0}
-  m_SampleRate: 12
+  m_SampleRate: 60
   m_WrapMode: 0
   m_Bounds:
     m_Center: {x: 0, y: 0, z: 0}
@@ -39,12 +37,11 @@ AnimationClip:
       customType: 23
       isPPtrCurve: 1
     pptrCurveMapping:
-    - {fileID: 21300002, guid: b7f481ede18adcc40ab0b07ae2434309, type: 3}
-    - {fileID: 21300004, guid: b7f481ede18adcc40ab0b07ae2434309, type: 3}
+    - {fileID: 21300012, guid: 04114991a3c9bf94595e49a38ebfa45e, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_StartTime: 0
-    m_StopTime: .166666672
+    m_StopTime: .0166666675
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
