@@ -74,10 +74,10 @@ public class movableSwitch : MonoBehaviour {
 	}
 
 	void OnCollisionStay2D(Collision2D other) {
-		if(other.gameObject.GetComponent<Avatar_BehaviorV2>() != null && !avatarIsOn && !upDown){
-			myRigid.velocity = Vector2.Lerp(myRigid.velocity,new Vector2(other.gameObject.GetComponent<Avatar_BehaviorV2>().totalMovement.x,0f),1f*Time.deltaTime);
+		if(other.gameObject.GetComponent<Avatar_Behavior>() != null && !avatarIsOn && !upDown){
+			//myRigid.velocity = Vector2.Lerp(myRigid.velocity,new Vector2(other.gameObject.GetComponent<Avatar_Behavior>().totalMovement.x,0f),1f*Time.deltaTime);
 			//Push (Vector2.right*(this.transform.position.x-other.gameObject.transform.position.x));
-			//Push (Vector2.right*(other.gameObject.GetComponent<Avatar_BehaviorV2>().totalMovement.x*Time.deltaTime));
+			//Push (Vector2.right*(other.gameObject.GetComponent<Avatar_Behavior>().totalMovement.x*Time.deltaTime));
 			
 		}
 	}

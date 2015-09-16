@@ -99,7 +99,7 @@ public class Water : MonoBehaviour{
 			}
 			else{
 				GameManager.Instance.AvatarB.IsInWater = false;
-				GameManager.Instance.AvatarB.Applied = false;
+				//GameManager.Instance.AvatarB.IsDashing = false;
 			}
 
 		}

@@ -22,10 +22,10 @@ public class PickUps : MonoBehaviour {
 		if(other.gameObject.tag == "Player"){
 			switch(myType){
 			case PickupType.Focus :
-				GameManager.Instance.AvatarB.TimeAmmo += 1;
+//				GameManager.Instance.AvatarB.TimeAmmo += 1;
 				break;	
 			case PickupType.Ammo :
-				GameManager.Instance.AvatarB.PowerAmmo += 1;
+			//	GameManager.Instance.AvatarB.PowerAmmo += 1;
 				break;
 			case PickupType.HalfHeart:
 				GameManager.Instance.AvatarB.HP += 1;

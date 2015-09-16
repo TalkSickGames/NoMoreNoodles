@@ -5,6 +5,7 @@ public class SpriteDash : MonoBehaviour {
 	//public Sprite[] mySprites;
 	private SpriteRenderer myRender;
 	private SpriteRenderer avatar;
+	private float tempF;
 	// Use this for initialization
 	void Start () {
 		myRender = this.GetComponent<SpriteRenderer>();
@@ -15,7 +16,10 @@ public class SpriteDash : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		myRender.material.color = new Color(myRender.material.color.r,myRender.material.color.g,myRender.material.color.b,Mathf.Lerp(myRender.material.color.a,0f,5f*Time.deltaTime));
-
+		tempF += 0.5f*Time.deltaTime;
+		myRender.material.color = new Color(myRender.material.color.r,myRender.material.color.g,myRender.material.color.b,myRender.material.color.a-tempF);
+		if(myRender.material.color.a<=0.1f){
+			Destroy(this.gameObject);
+		}
 	}
 }

@@ -34,19 +34,19 @@ public class Canvas_UI : MonoBehaviour {
 			masks[3].SetActive(false);
 		}
 
-		sMasks[0].SetActive(((int)GameManager.Instance.AvatarB.MyMask == 0)?true:false);
-		sMasks[1].SetActive(((int)GameManager.Instance.AvatarB.MyMask == 1)?true:false);
-		sMasks[2].SetActive(((int)GameManager.Instance.AvatarB.MyMask == 2)?true:false);
-		sMasks[3].SetActive(((int)GameManager.Instance.AvatarB.MyMask == 3)?true:false);
-
-		trickCursor.SetActive(GameManager.Instance.AvatarB.ChargeIsTrick);
-		trickAmmo[0].SetActive((GameManager.Instance.AvatarB.TrickAmmo >= 1)?true:false);
-		trickAmmo[1].SetActive((GameManager.Instance.AvatarB.TrickAmmo >= 2)?true:false);
-		trickAmmo[2].SetActive((GameManager.Instance.AvatarB.TrickAmmo >= 3)?true:false);
-		trickAmmo[3].SetActive((GameManager.Instance.AvatarB.TrickAmmo >= 4)?true:false);
-		powerAmmo[0].SetActive((GameManager.Instance.AvatarB.PowerAmmo >= 1)?true:false);
-		powerAmmo[1].SetActive((GameManager.Instance.AvatarB.PowerAmmo >= 2)?true:false);
-		powerCursor.SetActive(!GameManager.Instance.AvatarB.ChargeIsTrick);
+//		sMasks[0].SetActive(((int)GameManager.Instance.AvatarB.MyMask == 0)?true:false);
+//		sMasks[1].SetActive(((int)GameManager.Instance.AvatarB.MyMask == 1)?true:false);
+//		sMasks[2].SetActive(((int)GameManager.Instance.AvatarB.MyMask == 2)?true:false);
+//		sMasks[3].SetActive(((int)GameManager.Instance.AvatarB.MyMask == 3)?true:false);
+//
+//		trickCursor.SetActive(GameManager.Instance.AvatarB.ChargeIsTrick);
+		trickAmmo[0].SetActive((GameManager.Instance.AvatarB.Ammo >= 1)?true:false);
+		trickAmmo[1].SetActive((GameManager.Instance.AvatarB.Ammo >= 2)?true:false);
+		trickAmmo[2].SetActive((GameManager.Instance.AvatarB.Ammo >= 3)?true:false);
+		trickAmmo[3].SetActive((GameManager.Instance.AvatarB.Ammo >= 4)?true:false);
+//		powerAmmo[0].SetActive((GameManager.Instance.AvatarB.PowerAmmo >= 1)?true:false);
+//		powerAmmo[1].SetActive((GameManager.Instance.AvatarB.PowerAmmo >= 2)?true:false);
+//		powerCursor.SetActive(!GameManager.Instance.AvatarB.ChargeIsTrick);
 		////////////////
 
 		hearts[0].SetActive((GameManager.Instance.AvatarB.HP >= 1)?true:false);
@@ -57,9 +57,9 @@ public class Canvas_UI : MonoBehaviour {
 		hearts[5].SetActive((GameManager.Instance.AvatarB.HP >= 6)?true:false);
 		/////////////
 
-		timeAmmo[0].SetActive((GameManager.Instance.AvatarB.TimeAmmo >= 1)?true:false);
-		timeAmmo[1].SetActive((GameManager.Instance.AvatarB.TimeAmmo >= 2)?true:false);
-		timeAmmo[2].SetActive((GameManager.Instance.AvatarB.TimeAmmo >= 3)?true:false);
-		timeAmmo[3].SetActive((GameManager.Instance.AvatarB.TimeAmmo >= 4)?true:false);
+//		timeAmmo[0].SetActive((GameManager.Instance.AvatarB.TimeAmmo >= 1)?true:false);
+//		timeAmmo[1].SetActive((GameManager.Instance.AvatarB.TimeAmmo >= 2)?true:false);
+//		timeAmmo[2].SetActive((GameManager.Instance.AvatarB.TimeAmmo >= 3)?true:false);
+//		timeAmmo[3].SetActive((GameManager.Instance.AvatarB.TimeAmmo >= 4)?true:false);
 	}
 }
