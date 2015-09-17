@@ -6,7 +6,7 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: testDash
+  m_Name: nDashLeft
   m_Shader: {fileID: 4800000, guid: 0df5e33fd004c494e8f406628bdd17b6, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 5
@@ -26,7 +26,7 @@ Material:
         first:
           name: _BumpMap
         second:
-          m_Texture: {fileID: 2800000, guid: b931ce33f72ed464e92631a16f471fa7, type: 3}
+          m_Texture: {fileID: 2800000, guid: 406b96930fca33f4bbbc42957c90ce47, type: 3}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
       data:
@@ -93,6 +93,10 @@ Material:
         second: .5
       data:
         first:
+          name: _BumpAmt
+        second: 0
+      data:
+        first:
           name: _Parallax
         second: .0199999996
       data:
@@ -126,10 +130,6 @@ Material:
       data:
         first:
           name: _Metallic
-        second: 0
-      data:
-        first:
-          name: _BumpAmt
         second: 0
     m_Colors:
       data:
