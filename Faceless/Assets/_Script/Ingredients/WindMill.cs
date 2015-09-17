@@ -43,7 +43,7 @@ public class WindMill : MonoBehaviour {
 		float direction = 1f;
 
 		int tempPos = 0;
-		Debug.Log(pos);
+		//Debug.Log(pos);
 		if(pos.x > this.transform.position.x && pos.y > this.transform.position.y){
 			tempPos = 1;
 		}
@@ -56,8 +56,8 @@ public class WindMill : MonoBehaviour {
 		if(pos.x < this.transform.position.x && pos.y > this.transform.position.y){
 			tempPos = 4;
 		}
-		Debug.Log(tempPos);
-		Debug.Log(dir);
+		//Debug.Log(tempPos);
+		//Debug.Log(dir);
 		if(Mathfx.Approx(dir,0f,1f)){
 			if(tempPos == 1){direction = 1f; }
 			if(tempPos == 2){direction = 1f; }
@@ -106,7 +106,7 @@ public class WindMill : MonoBehaviour {
 			if(tempPos == 3){direction = -1f; }
 			if(tempPos == 4){direction = -1f; }
 		}
-		Debug.Log(direction);
+		//Debug.Log(direction);
 		forceToRot += baseForce * direction;
 		
 

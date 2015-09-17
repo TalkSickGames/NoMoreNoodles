@@ -7,7 +7,7 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: Effect
-  m_Shader: {fileID: 4800000, guid: 963484209d11fd7f110076aa44295342, type: 3}
+  m_Shader: {fileID: 4800000, guid: 0df5e33fd004c494e8f406628bdd17b6, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 5
   m_CustomRenderQueue: -1
@@ -130,7 +130,7 @@ Material:
       data:
         first:
           name: _BumpAmt
-        second: 128
+        second: 1167
     m_Colors:
       data:
         first:

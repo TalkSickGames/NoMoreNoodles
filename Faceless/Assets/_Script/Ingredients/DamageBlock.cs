@@ -14,15 +14,15 @@ public class DamageBlock : MonoBehaviour {
 	}
 
 	void OnCollisionEnter2D(Collision2D coll) {
-		if (coll.gameObject.GetComponent<Avatar_BehaviorV2>() != null){
-			coll.gameObject.GetComponent<Avatar_BehaviorV2>().TakeDamage(damage,(float)damage*10f,this.transform.position);
+		if (coll.gameObject.GetComponent<Avatar_Behavior>() != null){
+			coll.gameObject.GetComponent<Avatar_Behavior>().TakeDamage(damage,(float)damage*10f,this.transform.position);
 		}
 		
 	}
 
 	void OnCollisionStay2D(Collision2D coll) {
-		if (coll.gameObject.GetComponent<Avatar_BehaviorV2>() != null){
-			coll.gameObject.GetComponent<Avatar_BehaviorV2>().TakeDamage(damage,(float)damage*10f,this.transform.position);
+		if (coll.gameObject.GetComponent<Avatar_Behavior>() != null){
+			coll.gameObject.GetComponent<Avatar_Behavior>().TakeDamage(damage,(float)damage*10f,this.transform.position);
 		}
 		
 	}
