@@ -234,8 +234,7 @@ MonoBehaviour:
   myPart: {fileID: 126482}
   spriteDash: {fileID: 174218, guid: 7f3b9e288300bef469fb6025c6866a76, type: 2}
   dashEffect:
-  - {fileID: 100846, guid: aacd46c7566827c40a5b37645a3360d5, type: 2}
-  - {fileID: 115566, guid: 3ba1a865d2398e645b59207e96727ec9, type: 2}
+  - {fileID: 100846, guid: 909647802258f9e47a78553847d525aa, type: 2}
 --- !u!114 &11468600
 MonoBehaviour:
   m_ObjectHideFlags: 1
