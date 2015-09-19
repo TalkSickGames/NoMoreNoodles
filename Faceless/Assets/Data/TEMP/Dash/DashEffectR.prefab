@@ -12,7 +12,7 @@ GameObject:
   - 23: {fileID: 2396360}
   - 114: {fileID: 11445328}
   m_Layer: 0
-  m_Name: DashEffectV
+  m_Name: DashEffectR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -40,7 +40,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 2100000, guid: a4c400c59ee1cce49950349f98e59494, type: 2}
+  - {fileID: 2100000, guid: 4857418b404893240a70f49cce03831e, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -83,7 +83,7 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: a4c400c59ee1cce49950349f98e59494, type: 2}
+      objectReference: {fileID: 2100000, guid: 4857418b404893240a70f49cce03831e, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 115566}

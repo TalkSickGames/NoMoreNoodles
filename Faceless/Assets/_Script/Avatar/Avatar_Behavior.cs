@@ -68,8 +68,10 @@ public class Avatar_Behavior : MonoBehaviour {
 //	public PhysicsMaterial2D noSlip;
 	public GameObject spriteDash;
 	public GameObject[] dashEffect;
-	Quaternion tempV30 = Quaternion.Euler( new Vector3 (0f, 0f, 0f));
-	Quaternion tempV38 = Quaternion.Euler( new Vector3 (0f, 180f, 0f));
+	private Quaternion tempV30 = Quaternion.Euler( new Vector3 (0f, 0f, 0f));
+	private Quaternion tempV38 = Quaternion.Euler( new Vector3 (0f, 180f, 0f));
+	private Vector3 checkAngle;
+
 
 	void Start(){
 		myRigid = GetComponent<Rigidbody2D> ();
@@ -85,7 +87,7 @@ public class Avatar_Behavior : MonoBehaviour {
 
 	void Update(){
 
-		ammo = 90;
+		//ammo = 90;
 		pInputL = new Vector2 (Input.GetAxisRaw ("Horizontal"),Input.GetAxisRaw ("Vertical"));
 		pInputR = new Vector2 (Input.GetAxisRaw ("Horizontal2"),Input.GetAxisRaw ("Vertical2"));
 		inputAngleL = 180f+ Mathf.Atan2(pInputL.x*-1f,pInputL.y)* Mathf.Rad2Deg;
@@ -110,7 +112,7 @@ public class Avatar_Behavior : MonoBehaviour {
 			if(ammo == 0){
 				ammo = 1;
 			}
-			if((lastFallV  <= -22f || velocity.y <= -22f)){
+			if((lastFallV  <= -19f || velocity.y <= -19f)){
 				TakeDamage(1);
 				
 			}
@@ -125,15 +127,20 @@ public class Avatar_Behavior : MonoBehaviour {
 
 		isGrounded = CheckIsGround();
 
+		if(isGrounded || isLedge){
+
+		}
 
 		if (IsRJoystickAct()){
 			if(!isCharging){
 				timeCharge = 0f;
 			}
 
+
 			inputAngleR = 180f+ Mathf.Atan2(pInputR.x*-1f,pInputR.y)* Mathf.Rad2Deg;
 			angleClamp = Quaternion.Euler(0f, 0f, ( Mathf.Round(inputAngleR/45f)*45f));
 			GetDashDir();
+
 
 			isCharging = true;
 			timeCharge += 20f * Time.deltaTime * (1f / Time.timeScale);
@@ -144,22 +151,24 @@ public class Avatar_Behavior : MonoBehaviour {
 
 			//isChargingFromAir = false;
 
-			if(timeCharge > 0.25f/* && !applied */&& ammo >=1) {
+			if(timeCharge > 0.25f &&( isDashing == Mathfx.Approx (this.transform.position, dashTo, 0.05f) )&& ammo >=1) {
 
 				//applied = true;
 				chargeCooldown = 0f;
 
 				StopJumpIdle();
 
-				if(!Physics2D.BoxCast(this.transform.position,myBox.size,0f, (angleClamp*Vector3.up)*-1f,dashDistance,groundLayer)){	
+				if(!Physics2D.BoxCast(this.transform.position,new Vector2(myBox.size.x,myBox.size.y+0.3f),0f, (angleClamp*Vector3.up)*-1f,dashDistance,groundLayer)){	
 					dashTo = this.transform.position +( (angleClamp*Vector3.up)*-1f*dashDistance);
+					checkAngle = (angleClamp*Vector3.up)*-1f;
 				}else{
-					dashTo = Physics2D.BoxCast(this.transform.position,myBox.size,0f,(angleClamp*Vector3.up)*-1f,dashDistance,groundLayer).centroid;
+					dashTo = Physics2D.BoxCast(this.transform.position,new Vector2(myBox.size.x,myBox.size.y+0.3f),0f,(angleClamp*Vector3.up)*-1f,dashDistance,groundLayer).centroid;
+					checkAngle = (angleClamp*Vector3.up)*-1f;
 				}
-
-				Vector3 tempdashTo = new Vector3(dashTo.x,dashTo.y,0f);
-
-				GameObject tempDash = Instantiate(dashEffect[0], this.transform.position +((angleClamp*Vector3.up)*-1f*(Vector3.Distance(this.transform.position,tempdashTo)/2f)),angleClamp) as GameObject;
+				Vector3 tempdashTo;
+				GameObject tempDash = this.gameObject;
+				tempdashTo = new Vector3(dashTo.x,dashTo.y,0f);
+				tempDash = Instantiate(dashEffect[0], this.transform.position +((angleClamp*Vector3.up)*-1f*(Vector3.Distance(this.transform.position,tempdashTo)/2f)),angleClamp) as GameObject;
 				tempDash.transform.localScale = new Vector3( 3f,Vector3.Distance(this.transform.position,tempdashTo)-0.5f,1f);
 				for(int i = 0; i< (int)Vector3.Distance(this.transform.position,tempdashTo);i++){
 					GameObject tempSprite = Instantiate(spriteDash,this.transform.position +(angleClamp*Vector3.up)*-1f*i,mySprite.transform.rotation) as GameObject;
@@ -177,6 +186,7 @@ public class Avatar_Behavior : MonoBehaviour {
 				CancelInvoke("CanLedgeBack");
 				Invoke("CanLedgeBack",0.2f);
 				isDashing = true;
+				velocity = Vector2.zero;
 				myBurst.GetComponent<PolygonCollider2D>().enabled = true;
 
 			}
@@ -187,10 +197,11 @@ public class Avatar_Behavior : MonoBehaviour {
 		//isLedge = false;
 		if(velocity.y <=2f && !isGrounded && canLedge){
 
-			if(pInputL.x<-0.2f && Physics2D.Raycast(this.transform.position+(Vector3.left*0.25f)+(Vector3.up*1f),Vector2.down,1.5f,groundLayer)){
+			if((pInputL.x<-0.2f || isLedge) && Physics2D.Raycast(this.transform.position+(Vector3.left*0.25f)+(Vector3.up*1f),Vector2.down,1.5f,groundLayer)){
 				Vector2 tempPoint = Physics2D.Raycast(this.transform.position+(Vector3.left*0.25f)+(Vector3.up*1f),Vector2.down,1.5f,groundLayer).point;
 				if(!Physics2D.Raycast(tempPoint+(Vector2.up*0.1f),Vector2.left,0.25f,groundLayer)){
 					this.transform.position = tempPoint-(Vector2.up*0.8f)+(Vector2.right*0.25f);
+
 					isLedge = true;
 					isOnLeftLedge = true;
 					StopJumpIdle();
@@ -198,10 +209,11 @@ public class Avatar_Behavior : MonoBehaviour {
 				}			
 			}
 			
-			if(pInputL.x>0.2f && Physics2D.Raycast(this.transform.position+(Vector3.right*0.25f)+(Vector3.up*1f),Vector2.down,1.5f,groundLayer)){
+			if((pInputL.x>0.2f || isLedge)&& Physics2D.Raycast(this.transform.position+(Vector3.right*0.25f)+(Vector3.up*1f),Vector2.down,1.5f,groundLayer)){
 				Vector2 tempPoint = Physics2D.Raycast(this.transform.position+(Vector3.right*0.25f)+(Vector3.up*1f),Vector2.down,1.5f,groundLayer).point;
 				if(!Physics2D.Raycast(tempPoint+(Vector2.up*0.1f),Vector2.right,0.25f,groundLayer)){
 					this.transform.position = tempPoint-(Vector2.up*0.8f)+(Vector2.left*0.25f);
+
 					isLedge = true;
 					isOnLeftLedge = false;
 					StopJumpIdle();
@@ -210,11 +222,24 @@ public class Avatar_Behavior : MonoBehaviour {
 			}
 
 
+		}	
+
+		if(isGrounded || Physics2D.Raycast(this.transform.position,Vector2.down,1.5f,groundLayer)){
+			isLedge = false;
+			canLedge = false;
+			CancelInvoke("CanLedgeBack");
+			Invoke("CanLedgeBack",0.1f);
 		}
-
-
-
-
+		if(isDashing){
+			if(!Physics2D.BoxCast(this.transform.position,new Vector2(myBox.size.x,myBox.size.y+0.3f),0f,checkAngle,Vector2.Distance(this.transform.position,dashTo),groundLayer)){	
+				dashTo = this.transform.position +( checkAngle*Vector2.Distance(this.transform.position,dashTo));
+			}else{
+				dashTo = Physics2D.BoxCast(this.transform.position,new Vector2(myBox.size.x,myBox.size.y+0.3f),0f,checkAngle,Vector2.Distance(this.transform.position,dashTo),groundLayer).centroid;
+			}
+		}
+		
+		
+		
 		if(isGrounded || isLedge){
 			if(isGrounded && Physics2D.Raycast(this.transform.position,Vector2.down,1.5f,groundLayer)){
 				if(Physics2D.Raycast(this.transform.position,Vector2.down,1.5f,groundLayer).collider.gameObject.GetComponent<movableSwitch>()!=null){
@@ -290,17 +315,18 @@ public class Avatar_Behavior : MonoBehaviour {
 				isLedge = false;
 			}
 		}
-
-		if (!Mathfx.Approx (this.transform.position, dashTo, 0.1f) && dashTo != default(Vector2)) {
-			this.transform.position = Vector3.Lerp (this.transform.position, dashTo, dashSpeed * Time.deltaTime);
-			CancelInvoke("StopIdleJump");
-		} else {
-			if(!IsInvoking("StopJumpIdle") && dashTo != default(Vector2) && Mathfx.Approx (this.transform.position, dashTo, 0.1f)){
-				Invoke ("StopJumpIdle",dashIdle);
+		if(isDashing){
+			if (!Mathfx.Approx (this.transform.position, dashTo, 0.05f)/* && dashTo != default(Vector2)*/) {
+				this.transform.position = Vector3.Lerp (this.transform.position, dashTo, dashSpeed * Time.deltaTime);
+				CancelInvoke("StopJumpIdle");
+			} else {
+				if(!IsInvoking("StopJumpIdle")){
+					Invoke ("StopJumpIdle",dashIdle);
+				}
 			}
 		}
 
-		if(IsJoystickAct()){
+		if(IsJoystickAct() && !isDashing){
 			if(isGrounded){
 				movement = Mathf.Lerp(movement,tempMoveSpeed*pInputL.x,rampSpeed*Time.deltaTime);
 			}else{
@@ -312,7 +338,7 @@ public class Avatar_Behavior : MonoBehaviour {
 
 		if(!isLedge && !isDashing){
 			velocity = new Vector2(movement ,velocity.y-(tempGravity*Time.deltaTime));
-			velocity.y = Mathf.Clamp(velocity.y,-24f,24f);
+			velocity.y = Mathf.Clamp(velocity.y,-20f,20f);
 		}else{
 			velocity = Vector2.zero;
 		}
