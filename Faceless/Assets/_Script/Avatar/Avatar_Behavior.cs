@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using Foo;
 
 public class Avatar_Behavior : MonoBehaviour {
@@ -31,7 +32,8 @@ public class Avatar_Behavior : MonoBehaviour {
 	private bool isDashing;
 	private bool justTouchGround;
 	private bool justWentAir;
-	//private bool facingRight;
+    //private bool facingRight;
+    private bool isInDecision;
 
 	private bool applied;
 	private float chargeCooldown;
@@ -57,8 +59,12 @@ public class Avatar_Behavior : MonoBehaviour {
 	private float lastFallV;
 	private Vector2 dashTo;
 	private bool canLedge;
+    private float rTriggerChargeTime;
+    private float lTriggerChargeTime;
 
-	private Rigidbody2D myRigid;
+
+    public List<Anchor> myAnchors = new List<Anchor>();
+    private Rigidbody2D myRigid;
 	private BoxCollider2D myBox;
 	private CircleCollider2D myCircle;
 	private Animator myAnimator;
@@ -86,9 +92,10 @@ public class Avatar_Behavior : MonoBehaviour {
 	}
 
 	void Update(){
-
-		//ammo = 90;
-		pInputL = new Vector2 (Input.GetAxisRaw ("Horizontal"),Input.GetAxisRaw ("Vertical"));
+        Debug.Log(IsRTriggerAct());
+        Debug.Log(IsLTriggerAct());
+        //ammo = 90;
+        pInputL = new Vector2 (Input.GetAxisRaw ("Horizontal"),Input.GetAxisRaw ("Vertical"));
 		pInputR = new Vector2 (Input.GetAxisRaw ("Horizontal2"),Input.GetAxisRaw ("Vertical2"));
 		inputAngleL = 180f+ Mathf.Atan2(pInputL.x*-1f,pInputL.y)* Mathf.Rad2Deg;
 		GetMoveDir();
@@ -131,67 +138,89 @@ public class Avatar_Behavior : MonoBehaviour {
 
 		}
 
-		if (IsRJoystickAct()){
-			if(!isCharging){
-				timeCharge = 0f;
-			}
+        if (IsRTriggerAct()) {
+            rTriggerChargeTime += Time.deltaTime;
+
+        } else {
+            if (rTriggerChargeTime < 0.5f && rTriggerChargeTime != 0f) {
+                Anchor tempAn = null;
+                float tempDis = 100f;
+                foreach (Anchor an in myAnchors) {
+                    if (Vector3.Distance(this.transform.position, an.transform.position)< tempDis) {
+                        tempDis = Vector3.Distance(this.transform.position, an.transform.position);
+                        tempAn = an;
+                    }
+
+                }
+                if (tempAn != null) {
+                    DoDash(myAnchors[myAnchors.IndexOf(tempAn)].force, myAnchors[myAnchors.IndexOf(tempAn)].transform.position);
+                }
+            }
+            rTriggerChargeTime = 0f;
+        }
 
 
-			inputAngleR = 180f+ Mathf.Atan2(pInputR.x*-1f,pInputR.y)* Mathf.Rad2Deg;
-			angleClamp = Quaternion.Euler(0f, 0f, ( Mathf.Round(inputAngleR/45f)*45f));
-			GetDashDir();
+		//if (IsRJoystickAct()){
+		//	if(!isCharging){
+		//		timeCharge = 0f;
+		//	}
 
 
-			isCharging = true;
-			timeCharge += 20f * Time.deltaTime * (1f / Time.timeScale);
+		//	inputAngleR = 180f+ Mathf.Atan2(pInputR.x*-1f,pInputR.y)* Mathf.Rad2Deg;
+		//	angleClamp = Quaternion.Euler(0f, 0f, ( Mathf.Round(inputAngleR/45f)*45f));
+		//	GetDashDir();
+
+
+		//	isCharging = true;
+		//	timeCharge += 20f * Time.deltaTime * (1f / Time.timeScale);
 			
 		
-		}else{
-			isCharging = false;
+		//}else{
+		//	isCharging = false;
 
-			//isChargingFromAir = false;
+		//	//isChargingFromAir = false;
 
-			if(timeCharge > 0.25f &&( isDashing == Mathfx.Approx (this.transform.position, dashTo, 0.05f) )&& ammo >=1) {
+		//	if(timeCharge > 0.25f &&( isDashing == Mathfx.Approx (this.transform.position, dashTo, 0.05f) )&& ammo >=1) {
 
-				//applied = true;
-				chargeCooldown = 0f;
+		//		//applied = true;
+		//		chargeCooldown = 0f;
 
-				StopJumpIdle();
+		//		StopJumpIdle();
 
-				if(!Physics2D.BoxCast(this.transform.position,new Vector2(myBox.size.x,myBox.size.y+0.3f),0f, (angleClamp*Vector3.up)*-1f,dashDistance,groundLayer)){	
-					dashTo = this.transform.position +( (angleClamp*Vector3.up)*-1f*dashDistance);
-					checkAngle = (angleClamp*Vector3.up)*-1f;
-				}else{
-					dashTo = Physics2D.BoxCast(this.transform.position,new Vector2(myBox.size.x,myBox.size.y+0.3f),0f,(angleClamp*Vector3.up)*-1f,dashDistance,groundLayer).centroid;
-					checkAngle = (angleClamp*Vector3.up)*-1f;
-				}
-				Vector3 tempdashTo;
-				GameObject tempDash = this.gameObject;
-				tempdashTo = new Vector3(dashTo.x,dashTo.y,0f);
-				tempDash = Instantiate(dashEffect[0], this.transform.position +((angleClamp*Vector3.up)*-1f*(Vector3.Distance(this.transform.position,tempdashTo)/2f)),angleClamp) as GameObject;
-				tempDash.transform.localScale = new Vector3( 3f,Vector3.Distance(this.transform.position,tempdashTo)-0.5f,1f);
-				for(int i = 0; i< (int)Vector3.Distance(this.transform.position,tempdashTo);i++){
-					GameObject tempSprite = Instantiate(spriteDash,this.transform.position +(angleClamp*Vector3.up)*-1f*i,mySprite.transform.rotation) as GameObject;
-					tempSprite.GetComponent<SpriteRenderer>().material.color = new Color(tempSprite.GetComponent<SpriteRenderer>().material.color.r,tempSprite.GetComponent<SpriteRenderer>().material.color.g,tempSprite.GetComponent<SpriteRenderer>().material.color.b,0.2f+(i*0.2f));
-				}
+		//		if(!Physics2D.BoxCast(this.transform.position,new Vector2(myBox.size.x,myBox.size.y+0.3f),0f, (angleClamp*Vector3.up)*-1f,dashDistance,groundLayer)){	
+		//			dashTo = this.transform.position +( (angleClamp*Vector3.up)*-1f*dashDistance);
+		//			checkAngle = (angleClamp*Vector3.up)*-1f;
+		//		}else{
+		//			dashTo = Physics2D.BoxCast(this.transform.position,new Vector2(myBox.size.x,myBox.size.y+0.3f),0f,(angleClamp*Vector3.up)*-1f,dashDistance,groundLayer).centroid;
+		//			checkAngle = (angleClamp*Vector3.up)*-1f;
+		//		}
+		//		Vector3 tempdashTo;
+		//		GameObject tempDash = this.gameObject;
+		//		tempdashTo = new Vector3(dashTo.x,dashTo.y,0f);
+		//		tempDash = Instantiate(dashEffect[0], this.transform.position +((angleClamp*Vector3.up)*-1f*(Vector3.Distance(this.transform.position,tempdashTo)/2f)),angleClamp) as GameObject;
+		//		tempDash.transform.localScale = new Vector3( 3f,Vector3.Distance(this.transform.position,tempdashTo)-0.5f,1f);
+		//		for(int i = 0; i< (int)Vector3.Distance(this.transform.position,tempdashTo);i++){
+		//			GameObject tempSprite = Instantiate(spriteDash,this.transform.position +(angleClamp*Vector3.up)*-1f*i,mySprite.transform.rotation) as GameObject;
+		//			tempSprite.GetComponent<SpriteRenderer>().material.color = new Color(tempSprite.GetComponent<SpriteRenderer>().material.color.r,tempSprite.GetComponent<SpriteRenderer>().material.color.g,tempSprite.GetComponent<SpriteRenderer>().material.color.b,0.2f+(i*0.2f));
+		//		}
 
-				StartParticle();
-				CancelInvoke("StopParticle");
-				Invoke("StopParticle",0.15f);
+		//		StartParticle();
+		//		CancelInvoke("StopParticle");
+		//		Invoke("StopParticle",0.15f);
 
-				//trickAmmo -=1;
-			//	myBurst.GetComponent<burst>().isTrick = true;
-				isLedge = false;
-				canLedge = false;
-				CancelInvoke("CanLedgeBack");
-				Invoke("CanLedgeBack",0.2f);
-				isDashing = true;
-				velocity = Vector2.zero;
-				myBurst.GetComponent<PolygonCollider2D>().enabled = true;
+		//		//trickAmmo -=1;
+		//	//	myBurst.GetComponent<burst>().isTrick = true;
+		//		isLedge = false;
+		//		canLedge = false;
+		//		CancelInvoke("CanLedgeBack");
+		//		Invoke("CanLedgeBack",0.2f);
+		//		isDashing = true;
+		//		velocity = Vector2.zero;
+		//		myBurst.GetComponent<PolygonCollider2D>().enabled = true;
 
-			}
-			timeCharge = 0f;
-		}
+		//	}
+		//	timeCharge = 0f;
+		//}
 
 
 		//isLedge = false;
@@ -405,7 +434,43 @@ public class Avatar_Behavior : MonoBehaviour {
 
 	}
 
-	public void JumpFromLedge(DashDir dir){
+    public void DoDash(float distance, Vector3 anchor) {
+
+        StopJumpIdle();
+        float distanceToPoint = Vector3.Distance(this.transform.position, anchor);
+        Vector3 angle = (anchor - this.transform.position).normalized;
+
+        if (!Physics2D.BoxCast(this.transform.position, new Vector2(myBox.size.x, myBox.size.y + 0.3f), 0f, angle , distance + distanceToPoint , groundLayer)) {
+            dashTo = this.transform.position + ((angle) * (distance + distanceToPoint));
+            checkAngle = (angle);
+        } else {
+            dashTo = Physics2D.BoxCast(this.transform.position, new Vector2(myBox.size.x, myBox.size.y + 0.3f), 0f, angle , distance + distanceToPoint, groundLayer).centroid;
+            checkAngle = (angle);
+        }
+        Vector3 tempdashTo;
+        GameObject tempDash = this.gameObject;
+
+        tempdashTo = new Vector3(dashTo.x, dashTo.y, 0f);
+        tempDash = Instantiate(dashEffect[0], this.transform.position + (angle * (Vector3.Distance(this.transform.position, tempdashTo) / 2f)), Quaternion.LookRotation(Vector3.forward,angle)) as GameObject;
+        tempDash.transform.localScale = new Vector3(3f, Vector3.Distance(this.transform.position, tempdashTo) - 0.5f, 1f);
+
+        for (int i = 0; i < (int)Vector3.Distance(this.transform.position, tempdashTo); i++) {
+            GameObject tempSprite = Instantiate(spriteDash, this.transform.position + (angle) * i, mySprite.transform.rotation) as GameObject;
+            tempSprite.GetComponent<SpriteRenderer>().material.color = new Color(tempSprite.GetComponent<SpriteRenderer>().material.color.r, tempSprite.GetComponent<SpriteRenderer>().material.color.g, tempSprite.GetComponent<SpriteRenderer>().material.color.b, 0.2f + (i * 0.2f));
+        }
+
+        StartParticle();
+        CancelInvoke("StopParticle");
+        Invoke("StopParticle", 0.15f);
+        isLedge = false;
+        canLedge = false;
+        CancelInvoke("CanLedgeBack");
+        Invoke("CanLedgeBack", 0.2f);
+        isDashing = true;
+        velocity = Vector2.zero;
+    }
+
+    public void JumpFromLedge(DashDir dir){
 		SlipCollider();
 
 		switch(dir){
@@ -510,7 +575,23 @@ public class Avatar_Behavior : MonoBehaviour {
 		}
 	}
 
-	public void TakeDamage(int dmg){
+    bool IsRTriggerAct() {
+        if (!Mathfx.Approx(Input.GetAxis("TriggerR"), 0f, 0.7f)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    bool IsLTriggerAct() {
+        if (!Mathfx.Approx(Input.GetAxis("TriggerL"), 0f, 0.7f)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void TakeDamage(int dmg){
 		if(!isInvincible){
 			hp -= dmg;
 			isInvincible = true;
