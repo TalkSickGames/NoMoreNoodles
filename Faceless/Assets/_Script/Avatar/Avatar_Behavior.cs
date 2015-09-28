@@ -59,8 +59,8 @@ public class Avatar_Behavior : MonoBehaviour {
 	private float lastFallV;
 	private Vector2 dashTo;
 	private bool canLedge;
-    private float rTriggerChargeTime;
-    private float lTriggerChargeTime;
+    private float triggerChargeTime;
+    //private float lTriggerChargeTime;
 
 
     public List<Anchor> myAnchors = new List<Anchor>();
@@ -73,7 +73,7 @@ public class Avatar_Behavior : MonoBehaviour {
 //	public PhysicsMaterial2D slip;
 //	public PhysicsMaterial2D noSlip;
 	public GameObject spriteDash;
-	public GameObject[] dashEffect;
+	public GameObject dashEffect;
 	private Quaternion tempV30 = Quaternion.Euler( new Vector3 (0f, 0f, 0f));
 	private Quaternion tempV38 = Quaternion.Euler( new Vector3 (0f, 180f, 0f));
 	private Vector3 checkAngle;
@@ -92,8 +92,7 @@ public class Avatar_Behavior : MonoBehaviour {
 	}
 
 	void Update(){
-        Debug.Log(IsRTriggerAct());
-        Debug.Log(IsLTriggerAct());
+
         //ammo = 90;
         pInputL = new Vector2 (Input.GetAxisRaw ("Horizontal"),Input.GetAxisRaw ("Vertical"));
 		pInputR = new Vector2 (Input.GetAxisRaw ("Horizontal2"),Input.GetAxisRaw ("Vertical2"));
@@ -137,12 +136,35 @@ public class Avatar_Behavior : MonoBehaviour {
 		if(isGrounded || isLedge){
 
 		}
+ 
+        if (IsTriggerAct()) {
+            triggerChargeTime += Time.deltaTime*(1f/Time.timeScale);
+            if (triggerChargeTime > 0.25f && triggerChargeTime < 20f) {
+                Time.timeScale = 0.1f;
+                isInDecision = true;
 
-        if (IsRTriggerAct()) {
-            rTriggerChargeTime += Time.deltaTime;
+                Anchor tempAn = null;
+                float tempAngle = 100f;
+                Vector3 tempDes = (Quaternion.Euler(0f, 0f, Mathf.Atan2(pInputL.x * -1f, pInputL.y) * Mathf.Rad2Deg) * Vector3.up);
 
+                foreach (Anchor an in myAnchors) {
+                    an.isSelected = false;
+                    if (Vector3.Angle((this.transform.position - an.transform.position).normalized, tempDes * -1f) < 30f && Vector3.Angle((this.transform.position - an.transform.position).normalized, tempDes * -1f) < tempAngle) {
+                        tempAngle = Vector3.Angle((this.transform.position - an.transform.position).normalized, tempDes * -1f);
+                        tempAn = an;
+                    }
+
+                }
+                if (tempAn != null) {
+                    myAnchors[myAnchors.IndexOf(tempAn)].isSelected = true;
+                }
+
+            } else {
+                Time.timeScale = 1f;
+                isInDecision = false;
+            }
         } else {
-            if (rTriggerChargeTime < 0.5f && rTriggerChargeTime != 0f) {
+            if (triggerChargeTime < 0.25f && triggerChargeTime != 0f) {
                 Anchor tempAn = null;
                 float tempDis = 100f;
                 foreach (Anchor an in myAnchors) {
@@ -153,10 +175,35 @@ public class Avatar_Behavior : MonoBehaviour {
 
                 }
                 if (tempAn != null) {
-                    DoDash(myAnchors[myAnchors.IndexOf(tempAn)].force, myAnchors[myAnchors.IndexOf(tempAn)].transform.position);
+                    myAnchors[myAnchors.IndexOf(tempAn)].GetDash();
+                    //DoDash(myAnchors[myAnchors.IndexOf(tempAn)].force, myAnchors[myAnchors.IndexOf(tempAn)].transform.position);
                 }
             }
-            rTriggerChargeTime = 0f;
+            if (triggerChargeTime > 0.25f && IsJoystickAct()) {
+
+                Anchor tempAn = null;
+                float tempAngle = 100f;
+                Vector3 tempDes = (Quaternion.Euler(0f, 0f, Mathf.Atan2(pInputL.x * -1f, pInputL.y) * Mathf.Rad2Deg) * Vector3.up);
+                
+                foreach (Anchor an in myAnchors) {
+                    
+                    if (Vector3.Angle((this.transform.position-an.transform.position).normalized, tempDes * -1f) <30f && Vector3.Angle((this.transform.position - an.transform.position).normalized, tempDes * -1f) < tempAngle) {
+                        tempAngle = Vector3.Angle((this.transform.position - an.transform.position).normalized, tempDes * -1f);
+                        tempAn = an;
+                    }
+
+                }
+
+
+                if (tempAn != null) {
+                    myAnchors[myAnchors.IndexOf(tempAn)].GetDash();
+                    //DoDash(myAnchors[myAnchors.IndexOf(tempAn)].force, myAnchors[myAnchors.IndexOf(tempAn)].transform.position);
+                }
+            }
+        
+            Time.timeScale = 1f;
+            isInDecision = false;
+            triggerChargeTime = 0f;
         }
 
 
@@ -226,8 +273,8 @@ public class Avatar_Behavior : MonoBehaviour {
 		//isLedge = false;
 		if(velocity.y <=2f && !isGrounded && canLedge){
 
-			if((pInputL.x<-0.2f || isLedge) && Physics2D.Raycast(this.transform.position+(Vector3.left*0.25f)+(Vector3.up*1f),Vector2.down,1.5f,groundLayer)){
-				Vector2 tempPoint = Physics2D.Raycast(this.transform.position+(Vector3.left*0.25f)+(Vector3.up*1f),Vector2.down,1.5f,groundLayer).point;
+			if(/*(pInputL.x<-0.2f || isLedge) && */Physics2D.Raycast(this.transform.position+(Vector3.left*0.25f)+(Vector3.up*1.5f),Vector2.down,2f,groundLayer)){
+				Vector2 tempPoint = Physics2D.Raycast(this.transform.position+(Vector3.left*0.25f)+(Vector3.up*1.5f),Vector2.down,2f,groundLayer).point;
 				if(!Physics2D.Raycast(tempPoint+(Vector2.up*0.1f),Vector2.left,0.25f,groundLayer)){
 					this.transform.position = tempPoint-(Vector2.up*0.8f)+(Vector2.right*0.25f);
 
@@ -238,8 +285,8 @@ public class Avatar_Behavior : MonoBehaviour {
 				}			
 			}
 			
-			if((pInputL.x>0.2f || isLedge)&& Physics2D.Raycast(this.transform.position+(Vector3.right*0.25f)+(Vector3.up*1f),Vector2.down,1.5f,groundLayer)){
-				Vector2 tempPoint = Physics2D.Raycast(this.transform.position+(Vector3.right*0.25f)+(Vector3.up*1f),Vector2.down,1.5f,groundLayer).point;
+			if(/*(pInputL.x>0.2f || isLedge)&& */Physics2D.Raycast(this.transform.position+(Vector3.right*0.25f)+(Vector3.up*1.5f),Vector2.down,2f,groundLayer)){
+				Vector2 tempPoint = Physics2D.Raycast(this.transform.position+(Vector3.right*0.25f)+(Vector3.up*1.5f),Vector2.down,2f,groundLayer).point;
 				if(!Physics2D.Raycast(tempPoint+(Vector2.up*0.1f),Vector2.right,0.25f,groundLayer)){
 					this.transform.position = tempPoint-(Vector2.up*0.8f)+(Vector2.left*0.25f);
 
@@ -417,7 +464,15 @@ public class Avatar_Behavior : MonoBehaviour {
 		myPart.GetComponent<ParticleSystem>().enableEmission = false;
 	}
 
-	void StopJumpIdle(){
+    void OnDrawGizmos() {
+
+        if (isInDecision) {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawLine(this.transform.position, this.transform.position + (Quaternion.Euler(0f, 0f, Mathf.Atan2(pInputL.x * -1f, pInputL.y) * Mathf.Rad2Deg) * Vector3.up) * 10f);
+        }
+    }
+
+    void StopJumpIdle(){
 		isDashing = false;
 		dashTo = default(Vector2);
 	}
@@ -434,24 +489,24 @@ public class Avatar_Behavior : MonoBehaviour {
 
 	}
 
-    public void DoDash(float distance, Vector3 anchor) {
+    public void DoDash(float distance, Vector3 angle) {
 
         StopJumpIdle();
-        float distanceToPoint = Vector3.Distance(this.transform.position, anchor);
-        Vector3 angle = (anchor - this.transform.position).normalized;
+        //float distanceToPoint = Vector3.Distance(this.transform.position, anchor);
+        //Vector3 angle = (anchor - this.transform.position).normalized;
 
-        if (!Physics2D.BoxCast(this.transform.position, new Vector2(myBox.size.x, myBox.size.y + 0.3f), 0f, angle , distance + distanceToPoint , groundLayer)) {
-            dashTo = this.transform.position + ((angle) * (distance + distanceToPoint));
+        if (!Physics2D.BoxCast(this.transform.position, new Vector2(myBox.size.x, myBox.size.y + 0.3f), 0f, angle , distance , groundLayer)) {
+            dashTo = this.transform.position + ((angle) * (distance));
             checkAngle = (angle);
         } else {
-            dashTo = Physics2D.BoxCast(this.transform.position, new Vector2(myBox.size.x, myBox.size.y + 0.3f), 0f, angle , distance + distanceToPoint, groundLayer).centroid;
+            dashTo = Physics2D.BoxCast(this.transform.position, new Vector2(myBox.size.x, myBox.size.y + 0.3f), 0f, angle , distance, groundLayer).centroid;
             checkAngle = (angle);
         }
         Vector3 tempdashTo;
         GameObject tempDash = this.gameObject;
 
         tempdashTo = new Vector3(dashTo.x, dashTo.y, 0f);
-        tempDash = Instantiate(dashEffect[0], this.transform.position + (angle * (Vector3.Distance(this.transform.position, tempdashTo) / 2f)), Quaternion.LookRotation(Vector3.forward,angle)) as GameObject;
+        tempDash = Instantiate(dashEffect, this.transform.position + (angle * (Vector3.Distance(this.transform.position, tempdashTo) / 2f)), Quaternion.LookRotation(Vector3.forward,angle)) as GameObject;
         tempDash.transform.localScale = new Vector3(3f, Vector3.Distance(this.transform.position, tempdashTo) - 0.5f, 1f);
 
         for (int i = 0; i < (int)Vector3.Distance(this.transform.position, tempdashTo); i++) {
@@ -575,21 +630,21 @@ public class Avatar_Behavior : MonoBehaviour {
 		}
 	}
 
-    bool IsRTriggerAct() {
-        if (!Mathfx.Approx(Input.GetAxis("TriggerR"), 0f, 0.7f)) {
+    bool IsTriggerAct() {
+        if (!Mathfx.Approx(Input.GetAxis("TriggerR"), 0f, 0.7f) || !Mathfx.Approx(Input.GetAxis("TriggerL"), 0f, 0.7f)) {
             return true;
         } else {
             return false;
         }
     }
 
-    bool IsLTriggerAct() {
-        if (!Mathfx.Approx(Input.GetAxis("TriggerL"), 0f, 0.7f)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    //bool IsLTriggerAct() {
+    //    if (!Mathfx.Approx(Input.GetAxis("TriggerL"), 0f, 0.7f)) {
+    //        return true;
+    //    } else {
+    //        return false;
+    //    }
+    //}
 
     public void TakeDamage(int dmg){
 		if(!isInvincible){
