@@ -232,9 +232,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   myPart: {fileID: 126482}
+  myAnchors: []
   spriteDash: {fileID: 174218, guid: 7f3b9e288300bef469fb6025c6866a76, type: 2}
-  dashEffect:
-  - {fileID: 100846, guid: 909647802258f9e47a78553847d525aa, type: 2}
+  dashEffect: {fileID: 100846, guid: 909647802258f9e47a78553847d525aa, type: 2}
 --- !u!114 &11468600
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1460,6 +1460,10 @@ Prefab:
       propertyPath: idleDeSaut
       value: .25
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: dashEffect
+      value: 
+      objectReference: {fileID: 100846, guid: 909647802258f9e47a78553847d525aa, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 199672}

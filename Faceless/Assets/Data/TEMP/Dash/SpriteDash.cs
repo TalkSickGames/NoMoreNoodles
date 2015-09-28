@@ -16,7 +16,7 @@ public class SpriteDash : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		tempF += 0.5f*Time.deltaTime;
+		tempF += 0.25f*Time.deltaTime;
 		myRender.material.color = new Color(myRender.material.color.r,myRender.material.color.g,myRender.material.color.b,myRender.material.color.a-tempF);
 		if(myRender.material.color.a<=0.1f){
 			Destroy(this.gameObject);
