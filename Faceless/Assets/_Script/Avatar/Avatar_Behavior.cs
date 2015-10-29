@@ -10,6 +10,7 @@ public class Avatar_Behavior : MonoBehaviour {
 	public float jumpForce;
 	public float gravity;
 	private float tempGravity;
+	public float speedPropulsion;
 	public float dashSpeed;
 	public float dashIdle;
 	public float rampSpeed;
@@ -440,9 +441,10 @@ public class Avatar_Behavior : MonoBehaviour {
 
 
 		if(Mathfx.TestCurve(propStart,propEnd,propLerp).y < Mathfx.TestCurve(propStart,propEnd,propLerp+0.1f).y ){
-			propSpeed -= 0.5f*Time.deltaTime;
+			propSpeed = Mathf.Lerp(propSpeed,1f,Time.deltaTime);
+			//propSpeed -= 0.5f*Time.deltaTime;
 		}else{
-			propSpeed += 0.5f*Time.deltaTime;
+			propSpeed = Mathf.Lerp(propSpeed,speedPropulsion/Vector3.Distance(propStart,propEnd),Time.deltaTime);
 		}
 		propSpeed = Mathf.Clamp(propSpeed,1f,5f);
 		propLerp += propSpeed*Time.deltaTime;
@@ -550,7 +552,8 @@ public class Avatar_Behavior : MonoBehaviour {
 		propStart = this.transform.position;
 		propEnd = pos;
 		propLerp = -0.5f;
-		propSpeed = 12f/Vector3.Distance(propStart,propEnd);
+		propSpeed = speedPropulsion/Vector3.Distance(propStart,propEnd);
+		//propSpeed = speedPropulsion;
 	}
 //	public void DoProp(Vector3 start, Vector3 middle, Vector3 end) {
 //		isProp = true;
