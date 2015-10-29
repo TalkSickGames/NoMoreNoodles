@@ -30,6 +30,7 @@ public class Avatar_Behavior : MonoBehaviour {
 	private bool isCharging;
 	private bool isInWater;
 	private bool isDashing;
+	private bool isProp;
 	private bool justTouchGround;
 	private bool justWentAir;
     //private bool facingRight;
@@ -50,6 +51,12 @@ public class Avatar_Behavior : MonoBehaviour {
 	private DashDir moveDir;
 	private Vector2 velocity;
 	private float movement;
+	private float propLerp;
+	private float propSpeed;
+	private Vector3 propStart;
+	//private Vector3 propMiddle;
+	private Vector3 dashStart;
+	private Vector3 propEnd;
 	private Vector2 effectVelocity;
 	private Vector2 parVelocity;
 	private Vector3 parPos;
@@ -78,6 +85,8 @@ public class Avatar_Behavior : MonoBehaviour {
 	private Quaternion tempV38 = Quaternion.Euler( new Vector3 (0f, 180f, 0f));
 	private Vector3 checkAngle;
 
+	private Vector3 tempS;
+	private Vector3 tempE;
 
 	void Start(){
 		myRigid = GetComponent<Rigidbody2D> ();
@@ -168,7 +177,7 @@ public class Avatar_Behavior : MonoBehaviour {
                 Anchor tempAn = null;
                 float tempDis = 100f;
                 foreach (Anchor an in myAnchors) {
-                    if (Vector3.Distance(this.transform.position, an.transform.position)< tempDis) {
+					if (Vector3.Distance(this.transform.position, an.transform.position)< tempDis && Vector3.Distance(this.transform.position, an.transform.position)> 1f) {
                         tempDis = Vector3.Distance(this.transform.position, an.transform.position);
                         tempAn = an;
                     }
@@ -273,10 +282,11 @@ public class Avatar_Behavior : MonoBehaviour {
 		//isLedge = false;
 		if(velocity.y <=2f && !isGrounded && canLedge && !Physics2D.Raycast(this.transform.position,Vector2.down,3f,groundLayer)){
 
-			if(/*(pInputL.x<-0.2f || isLedge) && */Physics2D.Raycast(this.transform.position+(Vector3.left*0.25f)+(Vector3.up*1.5f),Vector2.down,2f,groundLayer)){
-				Vector2 tempPoint = Physics2D.Raycast(this.transform.position+(Vector3.left*0.25f)+(Vector3.up*1.5f),Vector2.down,2f,groundLayer).point;
+			if(/*(pInputL.x<-0.2f || isLedge) && */Physics2D.Raycast(this.transform.position+(Vector3.left*0.4f)+(Vector3.up*1.5f),Vector2.down,2f,groundLayer)){
+				Vector2 tempPoint = Physics2D.Raycast(this.transform.position+(Vector3.left*0.4f)+(Vector3.up*1.5f),Vector2.down,2f,groundLayer).point;
 				if(!Physics2D.Raycast(tempPoint+(Vector2.up*0.1f),Vector2.left,0.25f,groundLayer)){
-					this.transform.position = tempPoint-(Vector2.up*0.65f)+(Vector2.right*0.25f);
+					Vector2 tempPoing = Physics2D.Raycast(tempPoint+(Vector2.up*-0.1f)+(Vector2.right*0.5f),Vector2.left,1f,groundLayer).point;
+					this.transform.position = new Vector2(tempPoing.x, tempPoint.y)-(Vector2.up*0.65f)+(Vector2.right*0.25f);
 
 					isLedge = true;
 					isOnLeftLedge = true;
@@ -285,10 +295,13 @@ public class Avatar_Behavior : MonoBehaviour {
 				}			
 			}
 			
-			if(/*(pInputL.x>0.2f || isLedge)&& */Physics2D.Raycast(this.transform.position+(Vector3.right*0.25f)+(Vector3.up*1.5f),Vector2.down,2f,groundLayer)){
-				Vector2 tempPoint = Physics2D.Raycast(this.transform.position+(Vector3.right*0.25f)+(Vector3.up*1.5f),Vector2.down,2f,groundLayer).point;
+			if(/*(pInputL.x>0.2f || isLedge)&& */Physics2D.Raycast(this.transform.position+(Vector3.right*0.4f)+(Vector3.up*1.5f),Vector2.down,2f,groundLayer)){
+				Vector2 tempPoint = Physics2D.Raycast(this.transform.position+(Vector3.right*0.4f)+(Vector3.up*1.5f),Vector2.down,2f,groundLayer).point;
 				if(!Physics2D.Raycast(tempPoint+(Vector2.up*0.1f),Vector2.right,0.25f,groundLayer)){
-					this.transform.position = tempPoint-(Vector2.up*0.65f)+(Vector2.left*0.25f);
+					Vector2 tempPoing = Physics2D.Raycast(tempPoint+(Vector2.up*-0.1f)+(Vector2.right*-0.5f),Vector2.right,1f,groundLayer).point;
+					this.transform.position = new Vector2(tempPoing.x, tempPoint.y)-(Vector2.up*0.65f)+(Vector2.left*0.25f);
+
+					//this.transform.position = tempPoint-(Vector2.up*0.65f)+(Vector2.left*0.25f);
 
 					isLedge = true;
 					isOnLeftLedge = false;
@@ -422,7 +435,37 @@ public class Avatar_Behavior : MonoBehaviour {
 			velocity = Vector2.zero;
 		}
 
-		myRigid.velocity =  velocity + (parVelocity*120f)+effectVelocity;
+
+
+
+
+		if(Mathfx.TestCurve(propStart,propEnd,propLerp).y < Mathfx.TestCurve(propStart,propEnd,propLerp+0.1f).y ){
+			propSpeed -= 0.5f*Time.deltaTime;
+		}else{
+			propSpeed += 0.5f*Time.deltaTime;
+		}
+		propSpeed = Mathf.Clamp(propSpeed,1f,5f);
+		propLerp += propSpeed*Time.deltaTime;
+		if(isProp && !Physics2D.BoxCast(Mathfx.TestCurve(propStart,propEnd,Mathf.Clamp(propLerp,0f,100f)), new Vector2(myBox.size.x, myBox.size.y + 0.3f), 0f, Vector2.zero , 0f , groundLayer)){
+			if(propLerp<0f){
+				//this.transform.position = propStart;
+			}else{
+				isDashing = false;
+				this.transform.position = Mathfx.TestCurve(propStart,propEnd,propLerp);
+				if(propLerp>1f){
+					propEnd.x += pInputL.x*2f*Time.deltaTime;
+				}
+			}
+				myRigid.velocity = Vector2.zero;
+				velocity = Vector2.zero;
+				movement = 0f;
+				parVelocity = Vector2.zero;
+			
+		}else{
+			isProp = false;
+			myRigid.velocity =  velocity + (parVelocity*120f)+effectVelocity;
+		}
+
 	//	Debug.Log(myRigid.velocity);
 
 		///-////-////-////-////-////-////-////-////-////-////-////-////-////-////-////-////-////-////-////-////-////-////-////-////-////-////-////-////-////-////-////-////-////-////-////-////-////-////-//
@@ -434,6 +477,11 @@ public class Avatar_Behavior : MonoBehaviour {
 		if (!Mathfx.Approx(new Vector3(effectVelocity.x,effectVelocity.y,0f),Vector3.zero,0.1f)) {
 			effectVelocity = Vector2.Lerp(effectVelocity,Vector2.zero,4f*Time.deltaTime);
 		}else{effectVelocity = Vector2.zero;}
+		if(isDashing){
+			mySprite.transform.localScale = new Vector3(Mathf.Clamp(Vector3.Distance(this.transform.position,dashTo)/Vector3.Distance(dashStart,dashTo),0.1f,1f),Mathf.Clamp(Vector3.Distance(this.transform.position,dashTo)/Vector3.Distance(dashStart,dashTo),0.1f,1f),0f);
+		}else{
+			mySprite.transform.localScale = Vector3.one;
+		}
 		if(!isLedge){
 			if (movement < -0.1f) {mySprite.transform.rotation = tempV38;} 
 			if (movement > 0.1f) {mySprite.transform.rotation = tempV30;}
@@ -467,13 +515,19 @@ public class Avatar_Behavior : MonoBehaviour {
 		myPart.GetComponent<ParticleSystem>().enableEmission = false;
 	}
 
-//    void OnDrawGizmos() {
-//
-//        if (isInDecision) {
-//            Gizmos.color = Color.blue;
-//            Gizmos.DrawLine(this.transform.position, this.transform.position + (Quaternion.Euler(0f, 0f, Mathf.Atan2(pInputL.x * -1f, pInputL.y) * Mathf.Rad2Deg) * Vector3.up) * 10f);
-//        }
-//    }
+//	void OnCollisionEnter2D(Collision2D coll) {
+//		if(isProp){
+//			isProp = false;
+//		}
+//	}
+    void OnDrawGizmos() {
+
+        //if (isInDecision) {
+            Gizmos.color = Color.blue;
+			Gizmos.DrawCube(tempE,Vector3.one*5f);
+            Gizmos.DrawLine(this.transform.position, this.transform.position + (Quaternion.Euler(0f, 0f, Mathf.Atan2(pInputL.x * -1f, pInputL.y) * Mathf.Rad2Deg) * Vector3.up) * 10f);
+       // }
+    }
 
     void StopJumpIdle(){
 		isDashing = false;
@@ -491,9 +545,25 @@ public class Avatar_Behavior : MonoBehaviour {
 		tempMoveSpeed = moveSpeed-1.5f;
 
 	}
+	public void DoProp(Vector3 pos) {
+		isProp = true;
+		propStart = this.transform.position;
+		propEnd = pos;
+		propLerp = -0.5f;
+		propSpeed = 12f/Vector3.Distance(propStart,propEnd);
+	}
+//	public void DoProp(Vector3 start, Vector3 middle, Vector3 end) {
+//		isProp = true;
+//		propStart = start;
+//		propMiddle = middle;
+//		propEnd = end;
+//		propLerp = 0f;
+//		propSpeed = 10f/Vector3.Distance(propStart,propEnd);
+//	}
 
     public void DoDash(float distance, Vector3 angle) {
-
+		Debug.Log("dash");
+		isProp = false;
         StopJumpIdle();
         //float distanceToPoint = Vector3.Distance(this.transform.position, anchor);
         //Vector3 angle = (anchor - this.transform.position).normalized;
@@ -507,7 +577,7 @@ public class Avatar_Behavior : MonoBehaviour {
         }
         Vector3 tempdashTo;
         GameObject tempDash = this.gameObject;
-
+		dashStart = this.transform.position;
         tempdashTo = new Vector3(dashTo.x, dashTo.y, 0f);
         tempDash = Instantiate(dashEffect, this.transform.position + (angle * (Vector3.Distance(this.transform.position, tempdashTo) / 2f)), Quaternion.LookRotation(Vector3.forward,angle)) as GameObject;
         tempDash.transform.localScale = new Vector3(3f, Vector3.Distance(this.transform.position, tempdashTo) - 0.5f, 1f);
@@ -530,39 +600,48 @@ public class Avatar_Behavior : MonoBehaviour {
 
     public void JumpFromLedge(DashDir dir){
 		SlipCollider();
+		if(IsJoystickAct()){
+			switch(dir){
+			case DashDir.Up:
+			case DashDir.UpRight:
+			case DashDir.UpLeft:
+				velocity = new Vector2 (velocity.x,jumpForce*1.2f);
+				movement = 0f;
+				break;
+			case DashDir.Right:
+				if(isOnLeftLedge){
+					velocity = new Vector2 (velocity.x,jumpForce);
+					movement = 6f;
+				}else{
+					this.transform.position = this.transform.position+(Vector3.up*2f)+(Vector3.right*0.25f);
+					movement = 0f;
+				}
+				break;
+		
+			case DashDir.Left:
+				if(!isOnLeftLedge){
+					velocity = new Vector2 (velocity.x,jumpForce);
+					movement = -6f;
+				}else{
+					this.transform.position = this.transform.position+(Vector3.up*2f)+(Vector3.left*0.25f);
+					movement = 0f;
+				}
+				break;
 
-		switch(dir){
-		case DashDir.Up:
-		case DashDir.UpRight:
-		case DashDir.UpLeft:
-			velocity = new Vector2 (velocity.x,jumpForce*1.2f);
-			movement = 0f;
-			break;
-		case DashDir.Right:
-			if(isOnLeftLedge){
-				velocity = new Vector2 (velocity.x,jumpForce);
-				movement = 6f;
-			}else{
+			case DashDir.DownLeft:
+			case DashDir.Down:
+				velocity = new Vector2 (velocity.x,-2f);
+				movement = 0f;
+				break;
+			}
+		}else{
+			if(!isOnLeftLedge){
 				this.transform.position = this.transform.position+(Vector3.up*2f)+(Vector3.right*0.25f);
 				movement = 0f;
-			}
-			break;
-	
-		case DashDir.Left:
-			if(!isOnLeftLedge){
-				velocity = new Vector2 (velocity.x,jumpForce);
-				movement = -6f;
 			}else{
 				this.transform.position = this.transform.position+(Vector3.up*2f)+(Vector3.left*0.25f);
 				movement = 0f;
 			}
-			break;
-
-		case DashDir.DownLeft:
-		case DashDir.Down:
-			velocity = new Vector2 (velocity.x,-2f);
-			movement = 0f;
-			break;
 		}
 
 		tempGravity = gravity;

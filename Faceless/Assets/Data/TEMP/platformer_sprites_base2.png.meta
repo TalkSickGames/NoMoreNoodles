@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: fc57aaeedf5700e49a08305f4ce0b667
-timeCreated: 1441739121
+timeCreated: 1446153992
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -40,6 +40,7 @@ TextureImporter:
   lightmap: 0
   rGBM: 0
   compressionQuality: 50
+  allowsAlphaSplitting: 0
   spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
@@ -57,30 +58,30 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 510
-        width: 64
+        width: 54
         height: 64
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: platformer_sprites_base2_1
       rect:
         serializedVersion: 2
-        x: 64
+        x: 67
         y: 510
-        width: 64
+        width: 50
         height: 64
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: platformer_sprites_base2_2
       rect:
         serializedVersion: 2
-        x: 128
+        x: 131
         y: 510
-        width: 64
+        width: 49
         height: 64
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 

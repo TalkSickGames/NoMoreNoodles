@@ -1,9 +1,8 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\_Script\Avatar\Avatar_Behavior.cs">
+  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Anchor.cs">
     <Files>
-      <File FileName="Assets\_Script\Avatar\Avatar_Behavior.cs" Line="291" Column="58" />
-      <File FileName="Assets\Anchor.cs" Line="79" Column="11" />
+      <File FileName="Assets\Anchor.cs" Line="108" Column="17" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

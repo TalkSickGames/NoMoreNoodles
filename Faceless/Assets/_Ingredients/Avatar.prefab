@@ -223,7 +223,7 @@ MonoBehaviour:
   moveSpeed: 8
   jumpForce: 9.5
   gravity: 20
-  dashSpeed: 20
+  dashSpeed: 10
   dashIdle: .25
   rampSpeed: 8
   airControlSpeed: 2
@@ -1464,6 +1464,10 @@ Prefab:
       propertyPath: dashEffect
       value: 
       objectReference: {fileID: 100846, guid: 909647802258f9e47a78553847d525aa, type: 2}
+    - target: {fileID: 0}
+      propertyPath: dashSpeed
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 199672}
