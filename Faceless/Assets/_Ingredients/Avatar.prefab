@@ -223,6 +223,7 @@ MonoBehaviour:
   moveSpeed: 8
   jumpForce: 9.5
   gravity: 20
+  speedPropulsion: 15
   dashSpeed: 10
   dashIdle: .25
   rampSpeed: 8
@@ -1467,6 +1468,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: dashSpeed
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: speedPropulsion
+      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
