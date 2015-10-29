@@ -2,9 +2,8 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\_Script\Avatar\Avatar_Behavior.cs">
     <Files>
-      <File FileName="Assets\_Script\Avatar\Avatar_Behavior.cs" Line="161" Column="110" />
-      <File FileName="Assets\_Script\UI\Canvas_UI.cs" Line="1" Column="1" />
-      <File FileName="Assets\testDash.cs" Line="1" Column="1" />
+      <File FileName="Assets\_Script\Avatar\Avatar_Behavior.cs" Line="291" Column="58" />
+      <File FileName="Assets\Anchor.cs" Line="79" Column="11" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

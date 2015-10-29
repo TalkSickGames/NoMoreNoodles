@@ -149,7 +149,7 @@ public class Avatar_Behavior : MonoBehaviour {
 
                 foreach (Anchor an in myAnchors) {
                     an.isSelected = false;
-                    if (Vector3.Angle((this.transform.position - an.transform.position).normalized, tempDes * -1f) < 30f && Vector3.Angle((this.transform.position - an.transform.position).normalized, tempDes * -1f) < tempAngle) {
+                    if (Vector3.Angle((this.transform.position - an.transform.position).normalized, tempDes * -1f) < 45f && Vector3.Angle((this.transform.position - an.transform.position).normalized, tempDes * -1f) < tempAngle) {
                         tempAngle = Vector3.Angle((this.transform.position - an.transform.position).normalized, tempDes * -1f);
                         tempAn = an;
                     }
@@ -271,12 +271,12 @@ public class Avatar_Behavior : MonoBehaviour {
 
 
 		//isLedge = false;
-		if(velocity.y <=2f && !isGrounded && canLedge){
+		if(velocity.y <=2f && !isGrounded && canLedge && !Physics2D.Raycast(this.transform.position,Vector2.down,3f,groundLayer)){
 
 			if(/*(pInputL.x<-0.2f || isLedge) && */Physics2D.Raycast(this.transform.position+(Vector3.left*0.25f)+(Vector3.up*1.5f),Vector2.down,2f,groundLayer)){
 				Vector2 tempPoint = Physics2D.Raycast(this.transform.position+(Vector3.left*0.25f)+(Vector3.up*1.5f),Vector2.down,2f,groundLayer).point;
 				if(!Physics2D.Raycast(tempPoint+(Vector2.up*0.1f),Vector2.left,0.25f,groundLayer)){
-					this.transform.position = tempPoint-(Vector2.up*0.8f)+(Vector2.right*0.25f);
+					this.transform.position = tempPoint-(Vector2.up*0.65f)+(Vector2.right*0.25f);
 
 					isLedge = true;
 					isOnLeftLedge = true;
@@ -288,7 +288,7 @@ public class Avatar_Behavior : MonoBehaviour {
 			if(/*(pInputL.x>0.2f || isLedge)&& */Physics2D.Raycast(this.transform.position+(Vector3.right*0.25f)+(Vector3.up*1.5f),Vector2.down,2f,groundLayer)){
 				Vector2 tempPoint = Physics2D.Raycast(this.transform.position+(Vector3.right*0.25f)+(Vector3.up*1.5f),Vector2.down,2f,groundLayer).point;
 				if(!Physics2D.Raycast(tempPoint+(Vector2.up*0.1f),Vector2.right,0.25f,groundLayer)){
-					this.transform.position = tempPoint-(Vector2.up*0.8f)+(Vector2.left*0.25f);
+					this.transform.position = tempPoint-(Vector2.up*0.65f)+(Vector2.left*0.25f);
 
 					isLedge = true;
 					isOnLeftLedge = false;
@@ -300,7 +300,7 @@ public class Avatar_Behavior : MonoBehaviour {
 
 		}	
 
-		if(isGrounded || Physics2D.Raycast(this.transform.position,Vector2.down,1.5f,groundLayer)){
+		if(isGrounded || Physics2D.Raycast(this.transform.position,Vector2.down,2.15f,groundLayer)){
 			isLedge = false;
 			canLedge = false;
 			CancelInvoke("CanLedgeBack");
@@ -396,8 +396,11 @@ public class Avatar_Behavior : MonoBehaviour {
 				this.transform.position = Vector3.Lerp (this.transform.position, dashTo, dashSpeed * Time.deltaTime);
 				CancelInvoke("StopJumpIdle");
 			} else {
-				if(!IsInvoking("StopJumpIdle")){
+				if(!IsInvoking("StopJumpIdle") && !isGrounded){
 					Invoke ("StopJumpIdle",dashIdle);
+				}
+				if(!IsInvoking("StopJumpIdle") && isGrounded){
+					StopJumpIdle();
 				}
 			}
 		}
@@ -464,13 +467,13 @@ public class Avatar_Behavior : MonoBehaviour {
 		myPart.GetComponent<ParticleSystem>().enableEmission = false;
 	}
 
-    void OnDrawGizmos() {
-
-        if (isInDecision) {
-            Gizmos.color = Color.blue;
-            Gizmos.DrawLine(this.transform.position, this.transform.position + (Quaternion.Euler(0f, 0f, Mathf.Atan2(pInputL.x * -1f, pInputL.y) * Mathf.Rad2Deg) * Vector3.up) * 10f);
-        }
-    }
+//    void OnDrawGizmos() {
+//
+//        if (isInDecision) {
+//            Gizmos.color = Color.blue;
+//            Gizmos.DrawLine(this.transform.position, this.transform.position + (Quaternion.Euler(0f, 0f, Mathf.Atan2(pInputL.x * -1f, pInputL.y) * Mathf.Rad2Deg) * Vector3.up) * 10f);
+//        }
+//    }
 
     void StopJumpIdle(){
 		isDashing = false;
@@ -530,10 +533,11 @@ public class Avatar_Behavior : MonoBehaviour {
 
 		switch(dir){
 		case DashDir.Up:
+		case DashDir.UpRight:
+		case DashDir.UpLeft:
 			velocity = new Vector2 (velocity.x,jumpForce*1.2f);
 			movement = 0f;
 			break;
-		case DashDir.UpRight:
 		case DashDir.Right:
 			if(isOnLeftLedge){
 				velocity = new Vector2 (velocity.x,jumpForce);
@@ -543,7 +547,7 @@ public class Avatar_Behavior : MonoBehaviour {
 				movement = 0f;
 			}
 			break;
-		case DashDir.UpLeft:
+	
 		case DashDir.Left:
 			if(!isOnLeftLedge){
 				velocity = new Vector2 (velocity.x,jumpForce);
@@ -553,7 +557,7 @@ public class Avatar_Behavior : MonoBehaviour {
 				movement = 0f;
 			}
 			break;
-		case DashDir.DownRight:
+
 		case DashDir.DownLeft:
 		case DashDir.Down:
 			velocity = new Vector2 (velocity.x,-2f);

@@ -76,7 +76,7 @@ public class Anchor : MonoBehaviour {
         //} else {
         //    mySprite.color = Color.black;
         //}
-        isSelected = false;
+        //isSelected = false;
     }
 
     void OnDrawGizmos() {
@@ -93,6 +93,10 @@ public class Anchor : MonoBehaviour {
             Gizmos.DrawLine(this.transform.position, this.transform.position + ((Quaternion.Euler(0f, 0f, angle * -1f + (opening / 2f)) * Vector3.up) * activeDistance));
             Gizmos.DrawLine(this.transform.position, this.transform.position + ((Quaternion.Euler(0f, 0f, angle * -1f - (opening / 2f)) * Vector3.up) * activeDistance));
         }
+		if(isSelected){
+			Gizmos.color = Color.blue;
+			Gizmos.DrawLine(this.transform.position, GameManager.Instance.Avatar.transform.position);
+		}
     }
 
     public Vector2 MyDest{
