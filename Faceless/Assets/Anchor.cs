@@ -2,36 +2,52 @@
 using System.Collections;
 
 public class Anchor : MonoBehaviour {
+//	public GameObject middle;
+	public GameObject end;
     public float visibleDistance;
     public float activeDistance;
-    public float force;
+    private float force;
     public bool isDirected;
-    public float direction;
+	public bool limitedOpening;
+   	private float direction;
     public float angle;
-    public float opening;
+    private float opening;
     private Vector3 myCheckAngle;
     private SpriteRenderer mySprite;
-    private Vector3 myDest;
-    public bool debug;
+//	private Vector3 myDest;
+	private bool wasActivated;
+//    public bool debug;
     public bool isSelected;
     //private bool isOnRight;
     // Use this for initialization
     void Start () {
+		force = Vector3.Distance(this.transform.position, end.transform.position);
+
+		if(limitedOpening){
+			opening = 90f;
+		}else{
+			opening = 360f;
+		}
         myCheckAngle = (Quaternion.Euler(0f, 0f, angle * -1f) * Vector3.up);
         mySprite = this.GetComponent<SpriteRenderer>();
         mySprite.enabled = false;
         mySprite.color = Color.red;
         
-        myDest = this.transform.position + ((Quaternion.Euler(0f, 0f, direction * -1f) * Vector3.up) * force);
+		end.transform.position = end.transform.position;
     }
 	
 	// Update is called once per frame
 	void Update () {
-
-        if (isDirected && GameManager.Instance.AvatarB.IsDashing && Vector3.Distance(GameManager.Instance.Avatar.transform.position, this.transform.position) < 0.5f) {
-            float distance = Vector3.Distance(GameManager.Instance.Avatar.transform.position, myDest);
-            Vector3 angle = (myDest - GameManager.Instance.Avatar.transform.position).normalized;
-            GameManager.Instance.AvatarB.DoDash(distance, angle);
+		end.transform.position = end.transform.position;
+        if (/*isDirected && */wasActivated && GameManager.Instance.AvatarB.IsDashing && Vector3.Distance(GameManager.Instance.Avatar.transform.position, this.transform.position) < 0.5f) {
+            float distance = Vector3.Distance(GameManager.Instance.Avatar.transform.position, end.transform.position);
+            Vector3 angle = (end.transform.position - GameManager.Instance.Avatar.transform.position).normalized;
+			if(force != 0f){
+				GameManager.Instance.AvatarB.DoProp(end.transform.position);
+				//GameManager.Instance.AvatarB.DoProp(this.transform.position,middle.transform.position,end.transform.position);
+			}
+			wasActivated = false;
+           // GameManager.Instance.AvatarB.DoDash(distance, angle);
         }
 
         if (Vector3.Distance(GameManager.Instance.Avatar.transform.position, this.transform.position) < visibleDistance) {
@@ -80,13 +96,21 @@ public class Anchor : MonoBehaviour {
     }
 
     void OnDrawGizmos() {
-
+//		if(end != null){
+			
+//		}
         if (isDirected) {
-            Gizmos.color = Color.blue;
-            Gizmos.DrawSphere(this.transform.position + ((Quaternion.Euler(0f, 0f, direction * -1f) * Vector3.up) * force), 0.1f);
-            Gizmos.DrawLine(this.transform.position, this.transform.position + ((Quaternion.Euler(0f, 0f, direction * -1f) * Vector3.up) * force));
+			Gizmos.color = Color.green;
+			for(float i = -1f; i < 2f; i+=0.1f){
+				Gizmos.DrawLine(Mathfx.TestCurve(this.transform.position,end.transform.position,i),Mathfx.TestCurve(this.transform.position,end.transform.position,i+0.1f));
+			}
+
+//            Gizmos.color = Color.blue;
+//            Gizmos.DrawSphere(end.transform.position, 0.1f);
+//            Gizmos.DrawLine(this.transform.position, end.transform.position);
         }
-        if (opening < 360f && opening > 0f) {
+        if (limitedOpening) {
+			opening = 90f;
             Gizmos.color = Color.red;
             Gizmos.DrawLine(this.transform.position, this.transform.position + ((Quaternion.Euler(0f, 0f, angle*-1f) * Vector3.up) * activeDistance));
             Gizmos.color = Color.yellow;
@@ -97,22 +121,34 @@ public class Anchor : MonoBehaviour {
 			Gizmos.color = Color.blue;
 			Gizmos.DrawLine(this.transform.position, GameManager.Instance.Avatar.transform.position);
 		}
+		Gizmos.color = Color.blue;
+		Gizmos.DrawSphere(end.transform.position, 0.1f);
+		Gizmos.DrawLine(this.transform.position, end.transform.position);
     }
 
     public Vector2 MyDest{
-        get{return myDest;}
+        get{return end.transform.position;}
     }
 
     public void GetDash() {
         if (!isDirected) {
-            float distance = Vector3.Distance(GameManager.Instance.Avatar.transform.position, this.transform.position) + force;
-            Vector3 angle = (this.transform.position - GameManager.Instance.Avatar.transform.position).normalized;
-            GameManager.Instance.AvatarB.DoDash(distance, angle);
+//			float distance = Vector3.Distance(GameManager.Instance.Avatar.transform.position, this.transform.position) + force;
+//			Vector3 angle = (this.transform.position - GameManager.Instance.Avatar.transform.position).normalized;
+//			GameManager.Instance.AvatarB.DoDash(distance, angle);
+
+
+			Vector3 temp = (this.transform.position - GameManager.Instance.Avatar.transform.position).normalized;
+			end.transform.position = this.transform.position + (temp * force);
+			float distance = Vector3.Distance(GameManager.Instance.Avatar.transform.position, this.transform.position);
+			Vector3 angle = (this.transform.position - GameManager.Instance.Avatar.transform.position).normalized;
+			GameManager.Instance.AvatarB.DoDash(distance, angle);
+
         } else {
             float distance = Vector3.Distance(GameManager.Instance.Avatar.transform.position, this.transform.position);
             Vector3 angle = (this.transform.position - GameManager.Instance.Avatar.transform.position).normalized;
             GameManager.Instance.AvatarB.DoDash(distance, angle);
         }
+		wasActivated = true;
     }
 
     //public bool IsOnRight {

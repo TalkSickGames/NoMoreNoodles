@@ -26,6 +26,70 @@ public class Mathfx
 		return Mathf.Lerp(start, end, Mathf.Sin(value * Mathf.PI * 0.5f));
 	}
 
+	public static Vector3 QuadCurve(Vector3 start,Vector3 middle, Vector3 end, float value)
+	{
+//		Vector3 middle;
+//		float diff = Mathf.Abs(start.y - end.y);
+//		diff = Mathf.Clamp(diff,1f,50f);
+//		float offset = Mathf.Abs(start.x - end.x);
+//		if(start.y >= end.y){
+//			middle = new Vector3(Vector3.Lerp(start,end,0.5f).x, start.y+(2f/diff)+(0.5f*offset),0f);
+//		}else{
+//			middle = new Vector3(Vector3.Lerp(start,end,0.5f).x, end.y+(2f/diff)+(0.5f*offset) ,0f);
+//		}
+		
+		//return 2f *(end-2f*middle + start);
+		return Mathf.Pow(1-value,2f)*start+2*(1-value)*value*middle+Mathf.Pow(value,2f)*end;
+	}
+
+	public static Vector3 TestCurve(Vector3 start, Vector3 end, float value)
+	{
+		Vector3 middle;
+		float diff = Mathf.Abs(start.y - end.y);
+		diff = Mathf.Clamp(diff,1f,50f);
+		float offset = Mathf.Abs(start.x - end.x);
+		if(start.y >= end.y){
+			middle = new Vector3(Vector3.Lerp(start,end,0.66f).x, start.y+(1.5f/diff),0f);
+		}else{
+			middle = new Vector3(Vector3.Lerp(start,end,0.66f).x, end.y+(1.5f/diff) ,0f);
+		}
+
+		//return 2f *(end-2f*middle + start);
+		return Mathf.Pow(1-value,2f)*start+2*(1-value)*value*middle+Mathf.Pow(value,2f)*end;
+	}
+
+	public static Vector3 TwoDCurve(Vector3 vstart, Vector3 vend, float value)
+	{
+		float start = vstart.y;
+		float end = vend.y;
+
+		float tempf;
+		float ite;
+		float diff;
+		
+		value = Mathf.Clamp(value,0f,1f);
+		
+		ite = end - start;
+		
+		if (ite > 0f) {	
+			
+			diff = end-start;
+			diff = diff/2f;
+			tempf = Mathf.Lerp (start, end, value);
+			//tempf += Mathf.Lerp (0f, (Mathf.Clamp(diff,1.5f,5f))+0.25f, Mathf.Sin(value * Mathf.PI));
+			tempf += Mathf.Lerp (0f, Mathf.Clamp(diff,1.5f,50f), Mathf.Sin(value * Mathf.PI));
+			
+			return new Vector3(Mathf.Lerp(vstart.x,vend.x,value), tempf,0f);
+		} else {
+			diff = start-end;
+			diff = diff/2f;
+			tempf = Mathf.Lerp (start, end, value);
+			//tempf += Mathf.Lerp (0f, (Mathf.Clamp(diff,1.5f,5f))+0.25f, Mathf.Sin(value * Mathf.PI));
+			tempf += Mathf.Lerp (0f, Mathf.Clamp(diff,1.5f,50f), Mathf.Sin(value * Mathf.PI));
+			return new Vector3(Mathf.Lerp(vstart.x,vend.x,value), tempf,0f);
+		}
+		
+	}
 
 	public static float Curve(float start, float end, float value)
 	{
